@@ -21,6 +21,7 @@ h1, h2, h3, h4 {
 .date {
     float: right;
     color: #828282;
+    text-align: right;
 }
 
 .save {
@@ -50,4 +51,10 @@ h1, h2, h3, h4 {
 
 .post p br {
     margin-bottom: 20px;
+}
+
+.list-summary {
+    font-size: 1.2em;
+    color: #ff9400;
+    padding: 15px;
 }
