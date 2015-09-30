@@ -2,12 +2,33 @@
 
 {% block content %}
     {% for post in posts %}
-        <div class="post">
-            <div class="date">
-                {{ post.published_date }}
+        {% if forloop.first %}
+            <div class="list-summary">
+                {{ posts.count }} post{{posts.count | pluralize}} as of {% now "jS F Y H:i" %}
             </div>
-            <h1><a href="{% url "post_detail" pk=post.pk %}">{{ post.title }}</a></h1>
-            <p>{{ post.text|linebreaks }}</p>
+        {% endif %}
+        <div class="panel {% cycle 'panel-warning' 'panel-success' 'panel-info' %}">
+            <div class="panel-heading">
+                <span class="badge">{{ forloop.counter }}</span>
+                <div class="date">
+                    {{ post.author }} |
+                    {{ post.text | length }} characters |
+                    {{ post.text | wordcount }} words |
+                    {{ post.published_date | date:"D, d M Y, H:i" }}
+                </div>
+            </div>
+            {% url "blog:post_detail" pk=post.pk  as detail_url %}
+            <div class="panel-body">
+                <h3><a href="{{detail_url}}">{{ post.title | title }}</a></h3>
+                {{ post.text | linebreaks | truncatewords:80 }}
+            </div>
         </div>
+        {% if forloop.last %}
+            <div class="list-summary">
+                <a href="#">Back to top <span class="glyphicon glyphicon-menu-up"></span></a>
+            </div>
+        {% endif %}
+    {% empty %}
+        <div class="alert alert-info">Sorry, no published blog posts.</div>
     {% endfor %}
 {% endblock content %}
