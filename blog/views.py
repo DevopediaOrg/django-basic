@@ -7,6 +7,13 @@ from .models import Post
 from .forms import PostForm
 
 
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **kwargs):
+        view = super().as_view(**kwargs)
+        return login_required(view)
+
+
 class ListView(generic.ListView):
     context_object_name = 'posts' # default is object_list or post_list
     
@@ -15,12 +22,12 @@ class ListView(generic.ListView):
                            .order_by('-published_date')
 
 
-class CreateView(generic.CreateView):
+class CreateView(LoginRequiredMixin, generic.CreateView):
     model = Post
     form_class = PostForm # OR fields = ['title','text']
     template_name = 'blog/post_edit.html' # default is blog/post_form.html
 
-    @method_decorator(login_required)
+    #@method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
@@ -33,12 +40,12 @@ class CreateView(generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdateView(generic.UpdateView):
+class UpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Post
     form_class = PostForm
     template_name_suffix = '_edit' # default is _form
-        
-    @method_decorator(login_required)
+
+    #@method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         print(self.request)
         return super().dispatch(*args, **kwargs)
