@@ -14,12 +14,14 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
-class ListView(generic.ListView):
-    context_object_name = 'posts' # default is object_list or post_list
-    
+class PublishedPostFilterMixin(object):
     def get_queryset(self):
         return Post.objects.filter(published_date__lte=timezone.now()) \
                            .order_by('-published_date')
+
+
+class ListView(PublishedPostFilterMixin, generic.ListView):
+    context_object_name = 'posts' # default is object_list or post_list    
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
