@@ -12,5 +12,11 @@
         {% endif %}
         <h1>{{ post.title }}</h1>
         {{ post.text | linebreaks }}
+
+        <hr>
+        <strong>Author</strong><br/>
+        {{ author.first_name }} {{ author.last_name }}<br/>
+        Contact: {{ author.email }}<br/>
+        Member since: {{ author.date_joined | date:"M Y" }}
     </div>
 {% endblock %}

@@ -59,6 +59,10 @@ class UpdateView(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
-# Can use generic views directly for simple cases
-#class DetailView(generic.DetailView):
-#    model = Post
+class DetailView(generic.DetailView):
+    model = Post
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = Post.objects.select_related('author').get(pk=self.object.pk).author
+        return context
