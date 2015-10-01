@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User, AnonymousUser
 
 
 class Post(models.Model):
@@ -17,3 +18,11 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def commit(self, user):
+        if not isinstance(user, AnonymousUser):
+            self.author = user
+        else:
+            self.author = User.objects.get(username='admin')
+        self.publish()
+    

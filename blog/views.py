@@ -1,74 +1,57 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from django.contrib.auth.models import User, AnonymousUser
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import View
+from django.core.urlresolvers import reverse_lazy
+from django.views import generic
 from .models import Post
 from .forms import PostForm
 
-class PostListView(View):
-    def get(self, request):
-        try:
-            author = User.objects.get(username='admin')
-            posts = Post.objects.filter(published_date__lte=timezone.now(),
-                                        author=author) \
-                                .order_by('-published_date')
-        except ObjectDoesNotExist:
-            posts = None
-        return render(request, 'blog/post_list.html', {'posts': posts})
 
+class ListView(generic.ListView):
+    context_object_name = 'posts' # default is object_list or post_list
     
-class PostNewView(View):
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        form = PostForm()
-        return render(request, 'blog/post_edit.html', {'form': form})    
+    def get_queryset(self):
+        return Post.objects.filter(published_date__lte=timezone.now()) \
+                           .order_by('-published_date')
+
+
+class CreateView(generic.CreateView):
+    model = Post
+    form_class = PostForm # OR fields = ['title','text']
+    template_name = 'blog/post_edit.html' # default is blog/post_form.html
 
     @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            if not isinstance(request.user, AnonymousUser):
-                post.author = request.user
-            else:
-                post.author = User.objects.get(username='admin')
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('blog:post_detail', pk=post.pk)
-        else:
-            return render(request, 'blog/post_edit.html', {'form': form})
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.id})
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.commit(self.request.user)
+        return super().form_valid(form)
 
 
-class PostEditView(View):
+class UpdateView(generic.UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name_suffix = '_edit' # default is _form
+        
     @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
-        form = PostForm(instance=post)
-        return render(request, 'blog/post_edit.html', {'form': form})    
+    def dispatch(self, *args, **kwargs):
+        print(self.request)
+        return super().dispatch(*args, **kwargs)
 
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            if not isinstance(request.user, AnonymousUser):
-                post.author = request.user
-            else:
-                post.author = User.objects.get(username='admin')
-            post.published_date = timezone.now()
-            post.save()
-            #return HttpResponseRedirect('/post/'+str(post.pk))
-            return redirect('blog:post_detail', pk=post.pk)
-        else:
-            return render(request, 'blog/post_edit.html', {'form': form})
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.id})
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.commit(self.request.user)
+        return super().form_valid(form)
 
 
-class PostDetailView(View):
-    def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['pk'])
-        return render(request, 'blog/post_detail.html', {'post': post})
+# Can use generic views directly for simple cases
+#class DetailView(generic.DetailView):
+#    model = Post
