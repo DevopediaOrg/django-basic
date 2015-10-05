@@ -1,5 +1,7 @@
 {% extends "blog/base.html" %}
 
+{% block title %}{{ block.super }}: Post List{% endblock %}
+
 {% block content %}
     {% for post in posts %}
         {% if forloop.first %}
