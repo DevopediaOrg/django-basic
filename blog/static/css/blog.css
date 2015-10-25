@@ -24,7 +24,7 @@
     text-align: center;
     background-color: #f5f5f5;
     padding: 5px;
-    margin-top: 0px;
+    margin-top: 40px;
 }
 
 .content {
@@ -32,8 +32,18 @@
     margin-right: 20px;
 }
 
+.maincontent {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 h1, h2, h3, h4 {
     font-family: 'Share Tech';
+}
+
+h2.subtitle {
+    margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 .today-date {
