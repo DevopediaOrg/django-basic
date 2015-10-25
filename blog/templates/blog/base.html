@@ -12,7 +12,12 @@
     </head>
     <body>
         <!-- Top menu -->
-        <span class='today-date'>{% now "jS F Y H:i" %} IST</span>
+        <span class='today-date'>
+            {% now "j-M-Y H:i" %} IST
+            {% if user.is_authenticated %}
+                <span class="label label-success">{{ user.username }}</span>
+            {% endif %}
+        </span>
         {% include "blog/topmenu.html" %}
 
         <!-- Header image -->
