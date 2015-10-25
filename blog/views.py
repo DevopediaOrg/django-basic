@@ -32,15 +32,21 @@ class ListView(PublishedPostFilterMixin, generic.ListView):
             slugs = [slugify(x) for x in topics]
             tindex = slugs.index(path_items[-1])
             path_items[-1] = topics[tindex]
-        return path_items
+            curr_topic = topics[tindex]
+        else:
+            curr_topic = None
+        return path_items, curr_topic
 
     def get_context_data(self, **kwargs):
         topics = ['General', 'Aerospace', 'Agriculture', 'Automotive',
                   'Electrical & Electronics', 'Green Energy', 
                   'IT & Computing', 'Medical', 'Telecommunications']
         context = super().get_context_data(**kwargs)
+        path_items, curr_topic = self.get_path_items(topics)
+        print(curr_topic)
         context.update({
-            'path_items': self.get_path_items(topics),
+            'path_items': path_items,
+            'curr_topic': curr_topic,
             'topics': [(x,'/topics/'+slugify(x)) for x in topics],
         })
         return context

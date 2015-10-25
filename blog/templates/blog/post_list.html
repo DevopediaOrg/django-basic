@@ -1,36 +1,62 @@
 {% extends "blog/base.html" %}
 
+{% load staticfiles %}
+
 {% block title %}{{ block.super }}: Post List{% endblock %}
 
 {% block content %}
-    {% for post in posts %}
-        <div class="panel {% cycle 'panel-warning' 'panel-success' 'panel-info' %}">
-            <div class="panel-heading">
-                <span class="badge">{{ forloop.counter }}</span>
-                <div class="date">
-                    {{ post.author }} |
-                    {{ post.text | length }} characters |
-                    {{ post.text | wordcount }} words |
-                    {{ post.published_date | date:"D, d M Y, H:i" }}
-                </div>
-            </div>
-            {% url "blog:post_detail" pk=post.pk  as detail_url %}
-            <div class="panel-body">
-                <h3><a href="{{detail_url}}">{{ post.title | title | truncatechars:80 }}</a></h3>
-                {{ post.text | linebreaks | truncatewords:80 }}
-            </div>
-        </div>
+    {% if curr_topic == None %}
+        <h1 class="page-title">Latest Posts</h1>
+    {% else %}
+        <h1 class="page-title">{{curr_topic}}</h1>
+    {% endif %}
     
-        {% if forloop.last %}
-            {% include "blog/paginate.html" %}
-            <div class="list-summary" style="font-size:1em;text-align:right">
-                <a href="#"><span class="glyphicon glyphicon-menu-up"></span></a>
-            </div>
-        {% endif %}
-    {% empty %}
-        <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-            Sorry, no published blog posts.
+    <div class="row">
+      <div class="col-sm-8 col-md-8">
+          {% if curr_topic %}
+          <img class="topic-img" src="{% static 'images/categories' %}/{{curr_topic|slugify}}.jpg">
+          {% endif %}
+          {% for post in posts %}
+              <div class="panel {% cycle 'panel-warning' 'panel-success' 'panel-info' %}">
+                  <div class="panel-heading">
+                      <span class="badge">{{ forloop.counter }}</span>
+                      <div class="date">
+                          {{ post.author }} |
+                          {{ post.text | length }} characters |
+                          {{ post.text | wordcount }} words |
+                          {{ post.published_date | date:"D, d M Y, H:i" }}
+                      </div>
+                  </div>
+                  {% url "blog:post_detail" pk=post.pk  as detail_url %}
+                  <div class="panel-body">
+                      <h3><a href="{{detail_url}}">{{ post.title | title | truncatechars:80 }}</a></h3>
+                      {{ post.text | linebreaks | truncatewords:80 }}
+                  </div>
+              </div>
+          
+              {% if forloop.last %}
+                  {% include "blog/paginate.html" %}
+                  <div class="list-summary" style="font-size:1em;text-align:right">
+                      <a href="#"><span class="glyphicon glyphicon-menu-up"></span></a>
+                  </div>
+              {% endif %}
+          {% empty %}
+              <div class="alert alert-info" role="alert">
+                  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                  Sorry, no published blog posts.
+              </div>
+          {% endfor %}
+      </div>
+      <div class="col-sm-4 col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">XXX</h3>
+          </div>
+          <div class="panel-body">
+          xxx
+          </div>
         </div>
-    {% endfor %}
+      </div>
+    </div>
+
 {% endblock content %}
