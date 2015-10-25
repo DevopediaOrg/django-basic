@@ -28,6 +28,9 @@
             </div>
         {% endif %}
     {% empty %}
-        <div class="alert alert-info">Sorry, no published blog posts.</div>
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            Sorry, no published blog posts.
+        </div>
     {% endfor %}
 {% endblock content %}
