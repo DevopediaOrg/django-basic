@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
@@ -21,7 +22,28 @@ class PublishedPostFilterMixin(object):
 
 
 class ListView(PublishedPostFilterMixin, generic.ListView):
-    context_object_name = 'posts' # default is object_list or post_list    
+    context_object_name = 'posts' # default is object_list or post_list
+    paginate_by = 8
+
+    def get_path_items(self, topics):
+        path_items = self.request.path.split('/')
+        if 'topics' in path_items and path_items[-1]!='topics':
+            # convert from slug to topic
+            slugs = [slugify(x) for x in topics]
+            tindex = slugs.index(path_items[-1])
+            path_items[-1] = topics[tindex]
+        return path_items
+
+    def get_context_data(self, **kwargs):
+        topics = ['General', 'Aerospace', 'Agriculture', 'Automotive',
+                  'Electrical & Electronics', 'Green Energy', 
+                  'IT & Computing', 'Medical', 'Telecommunications']
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'path_items': self.get_path_items(topics),
+            'topics': [(x,'/topics/'+slugify(x)) for x in topics],
+        })
+        return context
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):

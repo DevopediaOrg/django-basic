@@ -1,0 +1,5 @@
+{% load bootstrap_pagination %}
+
+{% if is_paginated %}
+    {% bootstrap_paginate page_obj range=6 show_first_last="true" %}
+{% endif %}

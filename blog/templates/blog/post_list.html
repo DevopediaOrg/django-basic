@@ -4,11 +4,6 @@
 
 {% block content %}
     {% for post in posts %}
-        {% if forloop.first %}
-            <div class="list-summary">
-                {{ posts.count }} post{{posts.count | pluralize}} as of {% now "jS F Y H:i" %}
-            </div>
-        {% endif %}
         <div class="panel {% cycle 'panel-warning' 'panel-success' 'panel-info' %}">
             <div class="panel-heading">
                 <span class="badge">{{ forloop.counter }}</span>
@@ -21,13 +16,15 @@
             </div>
             {% url "blog:post_detail" pk=post.pk  as detail_url %}
             <div class="panel-body">
-                <h3><a href="{{detail_url}}">{{ post.title | title }}</a></h3>
+                <h3><a href="{{detail_url}}">{{ post.title | title | truncatechars:80 }}</a></h3>
                 {{ post.text | linebreaks | truncatewords:80 }}
             </div>
         </div>
+    
         {% if forloop.last %}
-            <div class="list-summary">
-                <a href="#">Back to top <span class="glyphicon glyphicon-menu-up"></span></a>
+            {% include "blog/paginate.html" %}
+            <div class="list-summary" style="font-size:1em;text-align:right">
+                <a href="#"><span class="glyphicon glyphicon-menu-up"></span></a>
             </div>
         {% endif %}
     {% empty %}

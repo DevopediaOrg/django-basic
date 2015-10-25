@@ -1,0 +1,12 @@
+<ol class="breadcrumb">
+    <li><a href="/">HOME</a></li>
+    {% for item in path_items %}
+        {% if item != '' %}
+            {% if forloop.last %}
+                <li class="active">{{ item | upper }}</li>
+            {% else %}
+                <li><a href="/{{ item | slugify }}">{{ item | upper }}</a></li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</ol>
