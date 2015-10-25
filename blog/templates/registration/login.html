@@ -3,24 +3,24 @@
 {% block content %}
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<div class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    Your username and password didn't match. Please try again.
+</div>
 {% endif %}
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
+<div class = "container">
+    <div class="login-wrapper">
+        <form action="{% url 'django.contrib.auth.views.login' %}" method="post" name="Login_Form" class="form-signin">
+            {% csrf_token %}
+            <h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
+            <hr class="colorgraph"><br>
+            <input type="text" class="form-control" maxlength="254" name="username" placeholder="Username" required="" autofocus="" />
+            <input type="password" class="login-form-control" name="password" placeholder="Password" required="" />
+            <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="Login" type="Submit">Login</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>            
+    </div>
+</div>
 {% endblock %}
