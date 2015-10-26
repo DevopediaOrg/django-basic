@@ -9,7 +9,7 @@ from .forms import PostForm
 
 
 def get_path_items(path, pk=None, category=None):
-    ''' Obtain path items to aid the display of breadcrumbs.
+    ''' Obtain path items to aid the display of menu and breadcrumbs.
         What we get from URL is a slug. This has to be matched
         against the actual category name.
     '''
@@ -17,19 +17,21 @@ def get_path_items(path, pk=None, category=None):
     topics = Category.objects.all().values_list('name', flat=True)
     slugs = [slugify(x) for x in topics]
 
-    if pk:
-        # Process DetailView
+    if pk: # DetailView
         curr_post = Post.objects.all().select_related('category').get(pk=pk)
         curr_topic = curr_post.category.name
         path_items = ['topics', curr_topic]
-    elif category:
-        # Process ListView
+    elif category: # ListView
         tindex = slugs.index(category)
         curr_topic = topics[tindex]
         path_items = ['topics', curr_topic]
+    elif ('post/new' in path or # CreateView
+          'post/' in path and '/edit' in path): # UpdateView
+        curr_topic = None
+        path_items = ['topics']
     else:
         curr_topic = None
-        path_items = path.strip('/').split('/')
+        path_items = []
 
     return path_items, curr_topic, topics
 
@@ -87,8 +89,13 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        path_items, curr_topic, topics = \
+            get_path_items(self.request.path)
         cats = Category.get_categories()
         context.update({
+            'path_items': path_items,
+            'topics': topics,
+            'curr_topic': curr_topic,
             'categories': cats,
         })
         return context
@@ -110,6 +117,19 @@ class UpdateView(LoginRequiredMixin, generic.UpdateView):
         post = form.save(commit=False)
         post.commit(self.request.user)
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        path_items, curr_topic, topics = \
+            get_path_items(self.request.path)
+        cats = Category.get_categories()
+        context.update({
+            'path_items': path_items,
+            'topics': topics,
+            'curr_topic': curr_topic,
+            'categories': cats,
+        })
+        return context
 
 
 class DetailView(generic.DetailView):

@@ -41,7 +41,7 @@
           </div>
           <div class="panel-body">
             <ul>
-                {% for cat, desc in categories %}
+                {% for cat, desc, _ in categories %}
                 <li><b>{{cat}}</b><br>{{desc}}</li>
                 {% endfor %}
             </ul>
