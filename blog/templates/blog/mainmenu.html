@@ -8,15 +8,15 @@
                     <li><a href="/">Home</a></li>
                 {% endif %}
 
-                {% if 'topics' in request.path %}
+                {% if 'topics' in request.path or 'post/' in request.path %}
                 <li class="dropdown show-on-hover active">
                 {% else %}
                 <li class="dropdown show-on-hover">
                 {% endif %}
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Topics <span class="caret"></span></a>
+                    <a href="/topics" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Topics <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        {% for topic, url in topics %}
-                            {% if request.path == url %}
+                        {% for topic in topics %}
+                            {% if topic == curr_topic %}
                             <li class="active"><a href="/topics/{{ topic | slugify }}">{{ topic }}</a></li>
                             {% else %}
                             <li><a href="/topics/{{ topic | slugify }}">{{ topic }}</a></li>

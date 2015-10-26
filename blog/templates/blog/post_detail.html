@@ -1,22 +1,92 @@
 {% extends "blog/base.html" %}
 
-{% block content %}
-    <div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
-            </div>
-        {% endif %}
-        {% if user.is_authenticated %}
-            <a class="btn btn-default" href="{% url "blog:post_edit" pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        {% endif %}
-        <h1>{{ post.title }}</h1>
-        {{ post.text | linebreaks }}
+{% load staticfiles %}
 
-        <hr>
-        <strong>Author</strong><br/>
-        {{ author.first_name }} {{ author.last_name }}<br/>
-        Contact: {{ author.email }}<br/>
-        Member since: {{ author.date_joined | date:"M Y" }}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}: Post Add/Edit{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">{{ post.title }}</h1>
+
+    <div class="row">
+      <div class="col-sm-8 col-md-8">
+        <div class="post">
+            <div class="row header">
+                <div class="col-sm-3 col-md-3">
+                    {% if post.published_date %}
+                    <div class="date cut-off">
+                      <p>
+                        <span class="day">{{ post.published_date | date:"d" }}</span>
+                        <span class="month">{{ post.published_date | date:"M" }}</span>
+                        <span class="year">{{ post.published_date | date:"Y" }}</span> 
+                      </p>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <span class="glyphicon glyphicon-equalizer"></span><br>
+                    {{ post.text | wordcount }} words
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <span class="glyphicon glyphicon-user"></span><br>
+                    {{ post.author.first_name }} {{ post.author.last_name }}
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    {% if user.is_authenticated %}
+                    <a href="{% url "blog:post_edit" pk=post.pk %}">
+                        <span class="glyphicon glyphicon-pencil"></span><br>
+                        Edit Post
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if post.image %}
+            <div class="main-img">
+                <img src="{{ MEDIA_URL }}/{{post.image}}">           
+            </div>
+            {% endif %}
+            
+            <div class="main-text">
+                {{ post.text | linebreaks }}
+            </div>
+
+            <div>
+                <h4>Tags</h4>
+                {% for tag in post.tags.all %}
+                <span class="label label-default">{{ tag }}</span>
+                {% endfor %}
+            </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4 col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">By Category</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+                {% for cat, _, num_posts in categories %}
+                    {% if cat == curr_topic %}
+                    <li><b>{{cat}} ({{num_posts}})</b></li>
+                    {% else %}
+                    <li>{{cat}} ({{num_posts}})</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Tag Cloud</h3>
+          </div>
+          <div class="panel-body">
+            TBD
+          </div>
+        </div>
+      </div>        
     </div>
+
 {% endblock %}

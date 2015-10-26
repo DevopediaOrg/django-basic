@@ -1,0 +1,92 @@
+.date {
+    background: #c4453c;
+    float: left;
+    height: 90px;
+    margin: 0px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    position: relative;
+    width: 50px;
+}
+.date p {
+    color: #f6f6f6;
+    font: 18px/30px Georgia, sans-serif;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 -1px 1px hsla(0,0%,0%,.1);
+}
+.date p:after {
+    content: '';
+    height: 25px;
+    left: -20px;
+    position: absolute;
+    top: -25px;
+    width: 90px;
+    /* box-shadow: 0 10px 10px -10px hsla(0,0%,0%,.5);*/
+}
+.date .day {
+    display: block;
+    font-size: 28px;
+    padding-top: 6px;
+}
+
+.date .year {
+    display: block;
+    font-size: 14px;
+    margin-top: -15px;
+}
+
+/* Traditional Ribbon */
+.traditional:after, .traditional:before {
+    border-top: 15px solid #c4453c; 
+    bottom: -15px;
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+.traditional:after {
+    border-right: 25px solid transparent;  
+    left: 0;  
+}
+.traditional:before {
+    border-left: 25px solid transparent;  
+    right: 0;  
+}
+
+/* Cut-off Ribbon */
+.cut-off:after {
+    background-image: -webkit-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c), 
+                      -webkit-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
+    background-image:    -moz-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
+                         -moz-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
+    background-image:     -ms-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
+                          -ms-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
+    background-image:      -o-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
+                           -o-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
+    background-image:         linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
+                              linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
+    background-repeat: repeat-x;
+    background-position: 50% 0;
+    background-size: 10px 10px;
+    bottom: -5px;
+    content: '';
+    height: 5px;
+    left: 0;
+    position: absolute; /* Make sure the parent element has a position set */
+    right: 0;
+}
+
+/* Rounded Ribbon */
+.rounded:before {
+    background-image: -webkit-radial-gradient(#c4453c 50%, transparent 50%);
+    background-position: 0% 100%;
+    background-repeat: repeat;
+    background-size: 10px 10px;
+    bottom: -5px;
+    content: '';
+    height: 95px;
+    left: -5px;
+    position: absolute;
+    right: -5px;
+}
