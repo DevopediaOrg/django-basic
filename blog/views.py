@@ -8,26 +8,28 @@ from .models import Category, Post
 from .forms import PostForm
 
 
-def get_path_items(path):
-    ''' Obtain path items to aid the display of breadcrumbs. '''
+def get_path_items(path, pk=None, category=None):
+    ''' Obtain path items to aid the display of breadcrumbs.
+        What we get from URL is a slug. This has to be matched
+        against the actual category name.
+    '''
     
     topics = Category.objects.all().values_list('name', flat=True)
     slugs = [slugify(x) for x in topics]
 
-    path_items = path.strip('/').split('/')
-    if len(path_items)>1 and path_items[-2]=='post' and path_items[-1].isdigit():
+    if pk:
         # Process DetailView
-        curr_post = Post.objects.all().select_related('category').get(pk=path_items[-1])
+        curr_post = Post.objects.all().select_related('category').get(pk=pk)
         curr_topic = curr_post.category.name
-        path_items[-2] = 'topics'
-        path_items[-1] = curr_topic
-    elif 'topics' in path_items and path_items[-1]!='topics':
+        path_items = ['topics', curr_topic]
+    elif category:
         # Process ListView
-        tindex = slugs.index(path_items[-1])
-        path_items[-1] = topics[tindex]
+        tindex = slugs.index(category)
         curr_topic = topics[tindex]
+        path_items = ['topics', curr_topic]
     else:
         curr_topic = None
+        path_items = path.strip('/').split('/')
 
     return path_items, curr_topic, topics
 
@@ -39,20 +41,25 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
-class PublishedPostFilterMixin(object):
-    def get_queryset(self):
-        return Post.objects.filter(published_date__lte=timezone.now()) \
-                           .prefetch_related('author','category','tags')
-
-
-class ListView(PublishedPostFilterMixin, generic.ListView):
+class ListView(generic.ListView):
     context_object_name = 'posts' # default is object_list or post_list
-    queryset = Post.objects.all().prefetch_related('author','category','tags')
     paginate_by = 8
+
+    def get_queryset(self):
+        filters = { 'published_date__lte' : timezone.now() }
+        if 'category' in self.kwargs:
+            path_items, curr_topic, topics = \
+                get_path_items(self.request.path, category=self.kwargs['category'])
+            filters['category__name'] = curr_topic
+        return Post.objects.filter(**filters) \
+                           .prefetch_related('author','category','tags')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        path_items, curr_topic, topics = get_path_items(self.request.path)
+        if 'category' in self.kwargs: cat = self.kwargs['category']
+        else: cat = None
+        path_items, curr_topic, topics = \
+            get_path_items(self.request.path, category=cat)
         context.update({
             'path_items': path_items,
             'topics': topics,
@@ -110,7 +117,8 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        path_items, curr_topic, topics = get_path_items(self.request.path)
+        path_items, curr_topic, topics = \
+            get_path_items(self.request.path, pk=self.kwargs['pk'])
         cats = Category.get_categories()
         context.update({
             'path_items': path_items,
