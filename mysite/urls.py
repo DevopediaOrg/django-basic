@@ -8,8 +8,6 @@ urlpatterns = [
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
-
-    url(r'^about$', TemplateView.as_view(template_name='about.html'), name="about"),
     
     url(r'', include('blog.urls', namespace='blog')),
 ]

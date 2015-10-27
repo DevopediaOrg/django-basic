@@ -43,6 +43,23 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
+class AboutView(generic.TemplateView):
+    template_name = 'blog/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        path_items, curr_topic, topics = \
+            get_path_items(self.request.path)
+        cats = Category.get_categories()
+        context.update({
+            'path_items': path_items,
+            'topics': topics,
+            'curr_topic': curr_topic,
+            'categories': cats,
+        })
+        return context
+
+
 class ListView(generic.ListView):
     context_object_name = 'posts' # default is object_list or post_list
     paginate_by = 8
