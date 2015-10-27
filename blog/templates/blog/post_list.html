@@ -17,18 +17,27 @@
           <img class="topic-img" src="{% static 'images/categories' %}/{{curr_topic|slugify}}.jpg">
           {% endif %}
           {% for post in posts %}
-              <div class="panel {% cycle 'panel-warning' 'panel-success' 'panel-info' %}">
-                  <div class="panel-heading">
-                      <span class="badge">{{ forloop.counter }}</span>
-                      <div class="date">
-                          {{ post.author }} |
-                          {{ post.text | length }} characters |
-                          {{ post.text | wordcount }} words |
-                          {{ post.published_date | date:"D, d M Y, H:i" }}
-                      </div>
+              <div class="post">
+                  <div class="header">
+                    {% if post.published_date %}
+                    <div class="date cut-off">
+                      <p>
+                        <span class="day">{{ post.published_date | date:"d" }}</span>
+                        <span class="month">{{ post.published_date | date:"M" }}</span>
+                        <span class="year">{{ post.published_date | date:"Y" }}</span> 
+                      </p>
+                    </div>
+                    {% endif %}
                   </div>
+
+                  {% if post.image %}
+                  <div class="thumbnail">
+                      <img src="{{ MEDIA_URL }}/{{post.image}}">           
+                  </div>
+                  {% endif %}
+
                   {% url "blog:post_detail" pk=post.pk  as detail_url %}
-                  <div class="panel-body">
+                  <div>
                       <h3><a href="{{detail_url}}">{{ post.title | title | truncatechars:80 }}</a></h3>
                       {{ post.text | linebreaks | truncatewords:80 }}
                   </div>
