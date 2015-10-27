@@ -16,7 +16,9 @@ class Topic(models.Model):
 
     @staticmethod
     def get_topics():
-        return Topic.objects.annotate(num_posts=models.Count('post')).values_list('name','description','num_posts')
+        return Topic.objects.filter(post__state__exact='Published') \
+                            .annotate(num_posts=models.Count('post')) \
+                            .values_list('name','description','num_posts')
         
 
 class Tag(models.Model):

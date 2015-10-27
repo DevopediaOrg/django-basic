@@ -65,7 +65,10 @@ class ListView(generic.ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        filters = { 'published_date__lte' : timezone.now() }
+        filters = {
+          'published_date__lte' : timezone.now(),
+          'state__exact' : 'Published',
+        }
         if 'topic' in self.kwargs:
             path_items, curr_topic = \
                 get_path_items(self.request.path, topic=self.kwargs['topic'])
