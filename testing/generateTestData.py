@@ -20,7 +20,7 @@ import datetime
 #====================================================================
 # Initializations
 #--------------------------------------------------------------------
-max_posts = 20
+max_posts = 120
 words = ['abstineo', 'accipio', 'ad', 'adulescens', 'aequus', 'aetas', 'affero', 'alius', 'alloquor', 'alter', 'amicus', 'an', 'animus', 'annus', 'ante', 'antecapio', 'antefero', 'arma', 'attineo', 'aufero', 'aut', 'autem', 'bellum', 'bonus', 'certus', 'civis', 'civitas', 'colloquor', 'comprobo', 'computo', 'concipio', 'confero', 'conscio', 'consequor', 'contineo', 'contra', 'corpus', 'crimen', 'debeo', 'decipio', 'defero', 'deinde', 'deputo', 'detineo', 'deus', 'differo', 'dignus', 'disputo', 'do', 'dum', 'dux', 'effero', 'ego', 'eloquor', 'enim', 'eo', 'et', 'etiam', 'excipio', 'exputo', 'facilis', 'fero', 'filius', 'fio', 'gens', 'gravis', 'habeo', 'haud', 'hic', 'homo', 'hostis', 'iam', 'idem', 'ille', 'imperium', 'imputo', 'incipio', 'inde', 'infero', 'ingenium', 'inquam', 'inter', 'intercipio', 'interdico', 'interdo', 'intereo', 'interloquor', 'ipse', 'is', 'iste', 'ita', 'iudicium', 'ius', 'mater', 'miles', 'modo', 'mors', 'moveo', 'mulier', 'nam', 'ne', 'nec', 'nemo', 'neque', 'neuter', 'nihil', 'nolo', 'nomen', 'non', 'nondum', 'nos', 'nullus', 'nunc', 'obloquor', 'obtineo', 'occipio', 'occupo', 'offero', 'omnis', 'opes', 'ordo', 'pars', 'pater', 'per', 'percipio', 'perfero', 'perputo', 'pertineo', 'possum', 'post', 'postfero', 'postputo', 'potestas', 'praecipio', 'praefero', 'praeloquor', 'primus', 'principium', 'profero', 'proloquor', 'promitto', 'promoveo', 'propono', 'prosequor', 'prosum', 'provenio', 'provideo', 'provoco', 'publicus', 'qualis', 'quam', 'quantus', 'qui', 'quidam', 'quidem', 'quis', 'quisque', 'recipio', 'refero', 'regnum', 'reputo', 'retineo', 'rex', 'salvus', 'satis', 'se', 'similis', 'sol', 'solus', 'subsequor', 'substo', 'subsum', 'subvenio', 'subvereor', 'sum', 'summitto', 'summoveo', 'suppeto', 'suppono', 'suscipio', 'sustineo', 'suus', 'talis', 'tam', 'tantus', 'tempus', 'teneo', 'totus', 'traloquor', 'trans', 'transeo', 'transfero', 'transmitto', 'transmoveo', 'transpono', 'transtineo', 'tu', 'tuus', 'ubi', 'ullus', 'unde', 'unus', 'urbs', 'uter', 'uxor', 'vereor', 'verus', 'vester', 'video', 'vir', 'virtus', 'volo', 'vos']
 images = os.listdir('media')
 globalvars = {
@@ -44,7 +44,7 @@ def get_words(min=4, max=15):
     return random.sample(words, random.randint(min, max))
 
 
-def get_sentence(min=4, max=15, is_title=False):
+def get_sentence(min=8, max=15, is_title=False):
     ''' Get a sentence with a random number of words within 
         specified limits. Return a sentence including a terminating
         period unless it is a title.
@@ -57,7 +57,7 @@ def get_sentence(min=4, max=15, is_title=False):
     return sentence
 
 
-def get_paragraph(min=8, max=20):
+def get_paragraph(min=4, max=8):
     ''' Get a paragraph with a random number of sentences within 
         specified limits. 
     '''
@@ -67,13 +67,13 @@ def get_paragraph(min=8, max=20):
     return ' '.join(para)
 
 
-def get_paragraphs(min=1, max=4):
+def get_paragraphs(min=6, max=12):
     ''' Get a random number of paragraphs within specified limits.
     '''
     paras = []
     for i in range(random.randint(min,max)):
         paras.append(get_paragraph())
-    return '\r\n'.join(paras)
+    return '\r\n\r\n'.join(paras)
 
 
 def get_next_id(k):

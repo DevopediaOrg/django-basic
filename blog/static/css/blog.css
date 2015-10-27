@@ -140,6 +140,12 @@ img.topic-img {
     margin-bottom: 40px;
 }
 
+.firstWord {
+    font-family: 'Share Tech';
+    font-size:1.6em;
+    text-transform: uppercase;
+}
+
 .up-arrow {
     float: right;
 }
