@@ -16,9 +16,11 @@
           {% if curr_topic %}
           <img class="topic-img" src="{% static 'images/categories' %}/{{curr_topic|slugify}}.jpg">
           {% endif %}
+
           {% for post in posts %}
               <div class="post">
-                  <div class="header">
+                <div class="row">
+                  <div class="col-sm-4 col-md-4">
                     {% if post.published_date %}
                     <div class="date cut-off">
                       <p>
@@ -28,19 +30,22 @@
                       </p>
                     </div>
                     {% endif %}
+
+                    {% if post.image %}
+                    <div class="thumbnail">
+                        <img src="{{ MEDIA_URL }}/{{post.image}}">           
+                    </div>
+                    {% endif %}
                   </div>
 
-                  {% if post.image %}
-                  <div class="thumbnail">
-                      <img src="{{ MEDIA_URL }}/{{post.image}}">           
+                  <div class="col-sm-8 col-md-8">
+                    {% url "blog:post_detail" pk=post.pk  as detail_url %}
+                    <div>
+                        <h3><a href="{{detail_url}}">{{ post.title | title | truncatechars:80 }}</a></h3>
+                        {{ post.text | linebreaks | truncatewords:80 }}
+                    </div>
                   </div>
-                  {% endif %}
-
-                  {% url "blog:post_detail" pk=post.pk  as detail_url %}
-                  <div>
-                      <h3><a href="{{detail_url}}">{{ post.title | title | truncatechars:80 }}</a></h3>
-                      {{ post.text | linebreaks | truncatewords:80 }}
-                  </div>
+                </div>
               </div>
           
               {% if forloop.last %}
@@ -56,16 +61,9 @@
               </div>
           {% endfor %}
       </div>
-      <div class="col-sm-4 col-md-4">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">XXX</h3>
-          </div>
-          <div class="panel-body">
-          xxx
-          </div>
-        </div>
-      </div>
+
+      {% include 'blog/post_modules.html' %}
+
     </div>
 
 {% endblock content %}

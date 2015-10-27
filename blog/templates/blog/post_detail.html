@@ -52,41 +52,18 @@
                 {{ post.text | linebreaks }}
             </div>
 
+            {% if post.tags.all %}
             <div>
                 <h4>Tags</h4>
                 {% for tag in post.tags.all %}
                 <span class="label label-default">{{ tag }}</span>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
       </div>
 
-      <div class="col-sm-4 col-md-4">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">By Category</h3>
-          </div>
-          <div class="panel-body">
-            <ul>
-                {% for cat, _, num_posts in categories %}
-                    {% if cat == curr_topic %}
-                    <li><b>{{cat}} ({{num_posts}})</b></li>
-                    {% else %}
-                    <li>{{cat}} ({{num_posts}})</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Tag Cloud</h3>
-          </div>
-          <div class="panel-body">
-            TBD
-          </div>
-        </div>
-      </div>        
-    </div>
+      {% include 'blog/post_modules.html' %}
 
+    </div>
 {% endblock %}

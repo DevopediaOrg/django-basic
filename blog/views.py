@@ -62,10 +62,12 @@ class ListView(generic.ListView):
         else: cat = None
         path_items, curr_topic, topics = \
             get_path_items(self.request.path, category=cat)
+        cats = Category.get_categories()
         context.update({
             'path_items': path_items,
             'topics': topics,
             'curr_topic': curr_topic,
+            'categories': cats,
         })
         return context
 
