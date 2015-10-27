@@ -1,15 +1,15 @@
 <div class="col-sm-4 col-md-4">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">By Category</h3>
+      <h3 class="panel-title">By Topic</h3>
     </div>
     <div class="panel-body">
       <ul>
-          {% for cat, _, num_posts in categories %}
-              {% if cat == curr_topic %}
-              <li>{{cat}} ({{num_posts}})</li>
+          {% for topic, _, num_posts in topics %}
+              {% if topic == curr_topic %}
+              <li>{{topic}} ({{num_posts}})</li>
               {% else %}
-              <li><a href="/topics/{{cat|slugify}}">{{cat}} ({{num_posts}})</a></li>
+              <li><a href="/topics/{{topic|slugify}}">{{topic}} ({{num_posts}})</a></li>
               {% endif %}
           {% endfor %}
       </ul>

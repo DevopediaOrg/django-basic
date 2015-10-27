@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^post/new/?$', views.CreateView.as_view(), name='post_new'),
     url(r'^about$', views.AboutView.as_view(), name="about"),
     url(r'^authors/?$', views.ListView.as_view(), name='post_list'),
-    url(r'^topics/?$', RedirectView.as_view(url='/topics/general', permanent=True)),
-    url(r'^topics/(?P<category>[\w-]+)/?$', views.ListView.as_view(), name='post_list'),
+    #url(r'^topics/?$', RedirectView.as_view(url='/topics/general', permanent=False)),
+    url(r'^topics/?$', views.ListView.as_view(), name='post_list'),
+    url(r'^topics/(?P<topic>[\w-]+)/?$', views.ListView.as_view(), name='post_list'),
 ]

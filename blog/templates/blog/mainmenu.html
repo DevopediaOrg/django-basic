@@ -13,9 +13,9 @@
                 {% else %}
                 <li class="dropdown show-on-hover">
                 {% endif %}
-                    <a href="/topics" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Topics <span class="caret"></span></a>
+                    <a href="/topics" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        {% for topic in topics %}
+                        {% for topic, _, _ in topics %}
                             {% if topic == curr_topic %}
                             <li class="active"><a href="/topics/{{ topic | slugify }}">{{ topic }}</a></li>
                             {% else %}

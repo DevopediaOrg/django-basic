@@ -29,7 +29,7 @@
           </div>
           <div class="panel-body">
             <ul>
-                <li>Choose the most suitable category for the post. Categories are listed below.</li>
+                <li>Choose the most suitable topic for the post. Topics are listed below.</li>
                 <li>You may choose to save a draft and publish the post later.</li>
                 <li>If you make the post private, only you can view it.</li>
             </ul>
@@ -37,12 +37,12 @@
         </div>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Categories</h3>
+            <h3 class="panel-title">Topics</h3>
           </div>
           <div class="panel-body">
             <ul>
-                {% for cat, desc, _ in categories %}
-                <li><b>{{cat}}</b><br>{{desc}}</li>
+                {% for topic, desc, _ in topics %}
+                <li><b>{{topic}}</b><br>{{desc}}</li>
                 {% endfor %}
             </ul>
           </div>

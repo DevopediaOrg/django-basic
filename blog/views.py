@@ -4,25 +4,25 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
-from .models import Category, Post
+from .models import Topic, Post
 from .forms import PostForm
 
 
-def get_path_items(path, pk=None, category=None):
+def get_path_items(path, pk=None, topic=None):
     ''' Obtain path items to aid the display of menu and breadcrumbs.
         What we get from URL is a slug. This has to be matched
-        against the actual category name.
+        against the actual topic name.
     '''
     
-    topics = Category.objects.all().values_list('name', flat=True)
+    topics = Topic.objects.all().values_list('name', flat=True)
     slugs = [slugify(x) for x in topics]
 
     if pk: # DetailView
-        curr_post = Post.objects.all().select_related('category').get(pk=pk)
-        curr_topic = curr_post.category.name
+        curr_post = Post.objects.all().select_related('topic').get(pk=pk)
+        curr_topic = curr_post.topic.name
         path_items = ['topics', curr_topic]
-    elif category: # ListView
-        tindex = slugs.index(category)
+    elif topic: # ListView
+        tindex = slugs.index(topic)
         curr_topic = topics[tindex]
         path_items = ['topics', curr_topic]
     elif ('post/new' in path or # CreateView
@@ -33,7 +33,7 @@ def get_path_items(path, pk=None, category=None):
         curr_topic = None
         path_items = []
 
-    return path_items, curr_topic, topics
+    return path_items, curr_topic
 
 
 class LoginRequiredMixin(object):
@@ -48,14 +48,14 @@ class AboutView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        path_items, curr_topic, topics = \
+        path_items, curr_topic = \
             get_path_items(self.request.path)
-        cats = Category.get_categories()
+        topics = Topic.get_topics()
         context.update({
             'path_items': path_items,
             'topics': topics,
             'curr_topic': curr_topic,
-            'categories': cats,
+            'topics': topics,
         })
         return context
 
@@ -66,25 +66,25 @@ class ListView(generic.ListView):
 
     def get_queryset(self):
         filters = { 'published_date__lte' : timezone.now() }
-        if 'category' in self.kwargs:
-            path_items, curr_topic, topics = \
-                get_path_items(self.request.path, category=self.kwargs['category'])
-            filters['category__name'] = curr_topic
+        if 'topic' in self.kwargs:
+            path_items, curr_topic = \
+                get_path_items(self.request.path, topic=self.kwargs['topic'])
+            filters['topic__name'] = curr_topic
         return Post.objects.filter(**filters) \
-                           .prefetch_related('author','category','tags')
+                           .prefetch_related('author','topic','tags')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'category' in self.kwargs: cat = self.kwargs['category']
-        else: cat = None
-        path_items, curr_topic, topics = \
-            get_path_items(self.request.path, category=cat)
-        cats = Category.get_categories()
+        if 'topic' in self.kwargs: topic = self.kwargs['topic']
+        else: topic = None
+        path_items, curr_topic = \
+            get_path_items(self.request.path, topic=topic)
+        topics = Topic.get_topics()
         context.update({
             'path_items': path_items,
             'topics': topics,
             'curr_topic': curr_topic,
-            'categories': cats,
+            'topics': topics,
         })
         return context
 
@@ -108,14 +108,14 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        path_items, curr_topic, topics = \
+        path_items, curr_topic = \
             get_path_items(self.request.path)
-        cats = Category.get_categories()
+        topics = Topic.get_topics()
         context.update({
             'path_items': path_items,
             'topics': topics,
             'curr_topic': curr_topic,
-            'categories': cats,
+            'topics': topics,
         })
         return context
 
@@ -139,14 +139,14 @@ class UpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        path_items, curr_topic, topics = \
+        path_items, curr_topic = \
             get_path_items(self.request.path)
-        cats = Category.get_categories()
+        topics = Topic.get_topics()
         context.update({
             'path_items': path_items,
             'topics': topics,
             'curr_topic': curr_topic,
-            'categories': cats,
+            'topics': topics,
         })
         return context
 
@@ -156,13 +156,13 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        path_items, curr_topic, topics = \
+        path_items, curr_topic = \
             get_path_items(self.request.path, pk=self.kwargs['pk'])
-        cats = Category.get_categories()
+        topics = Topic.get_topics()
         context.update({
             'path_items': path_items,
             'topics': topics,
             'curr_topic': curr_topic,
-            'categories': cats,
+            'topics': topics,
         })
         return context

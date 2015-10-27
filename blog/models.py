@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.models import User, AnonymousUser
 
 
-class Category(models.Model):
+class Topic(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
 
@@ -15,8 +15,8 @@ class Category(models.Model):
         ordering = ('name',)
 
     @staticmethod
-    def get_categories():
-        return Category.objects.annotate(num_posts=models.Count('post')).values_list('name','description','num_posts')
+    def get_topics():
+        return Topic.objects.annotate(num_posts=models.Count('post')).values_list('name','description','num_posts')
         
 
 class Tag(models.Model):
@@ -38,7 +38,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=200, blank=False, null=False)
 
-    category = models.ForeignKey(Category, blank=False)
+    topic = models.ForeignKey(Topic, blank=False)
 
     states = ['Draft', 'Published', 'Unpublished']
     states = [(x,x) for x in states]

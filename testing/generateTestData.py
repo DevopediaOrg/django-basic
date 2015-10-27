@@ -31,7 +31,7 @@ last_id = {
     'post' : 2,
     'tag' : 15,
     'option' : 3,
-    'category' : 9,
+    'topic' : 9,
 }
 
 
@@ -120,7 +120,7 @@ def generate_post():
         'author_id': random.randint(1, last_id['user']),
         'image': './' + image,
         'state': state,
-        'category_id': random.randint(1, last_id['category']),
+        'topic_id': random.randint(1, last_id['topic']),
         'text': get_paragraphs(),
     }
 

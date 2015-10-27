@@ -14,7 +14,7 @@
     <div class="row">
       <div class="col-sm-8 col-md-8">
           {% if curr_topic %}
-          <img class="topic-img" src="{% static 'images/categories' %}/{{curr_topic|slugify}}.jpg">
+          <img class="topic-img" src="{% static 'images/topics' %}/{{curr_topic|slugify}}.jpg">
           {% endif %}
 
           {% for post in posts %}
