@@ -50,9 +50,6 @@
           
               {% if forloop.last %}
                   {% include "blog/paginate.html" %}
-                  <div class="list-summary" style="font-size:1em;text-align:right">
-                      <a href="#"><span class="glyphicon glyphicon-menu-up"></span></a>
-                  </div>
               {% endif %}
           {% empty %}
               <div class="alert alert-info" role="alert">

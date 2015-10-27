@@ -140,8 +140,6 @@ img.topic-img {
     margin-bottom: 40px;
 }
 
-.list-summary {
-    font-size: 1.2em;
-    color: #ff9400;
-    padding: 15px;
+.up-arrow {
+    float: right;
 }
