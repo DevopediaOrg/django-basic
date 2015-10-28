@@ -128,6 +128,11 @@ class UpdateView(LoginRequiredMixin, ContextMixin, generic.UpdateView):
     form_class = PostForm
     template_name_suffix = '_edit' # default is _form
 
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.id!=self.get_object().author.id:
+            raise Http404("Only the original creator can edit the post")
+        return super().dispatch(*args, **kwargs)
+
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.id})
 
