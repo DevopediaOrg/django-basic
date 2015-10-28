@@ -143,12 +143,14 @@ img.topic-img {
     text-transform: uppercase;
 }
 
-.author-info {
-    padding-left: 10px;
-}
-
 .author-post-states {
     margin-top: 20px;
+}
+
+.author-name {
+    font-family: 'Share Tech';
+    font-size:1.2em;
+    text-transform: uppercase;
 }
 
 .state-icons {

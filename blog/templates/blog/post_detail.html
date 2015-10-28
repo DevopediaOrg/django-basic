@@ -37,7 +37,7 @@
                     {{ post.text | wordcount }} words
                 </div>
                 <div class="col-sm-3 col-md-3">
-                    <span class="glyphicon glyphicon-user"></span><br>
+                    <img style="max-height:19px" src="{{ MEDIA_URL }}/{{post.author.author.photo}}"><br>
                     {{ post.author.first_name }} {{ post.author.last_name }}
                 </div>
                 <div class="col-sm-3 col-md-3">

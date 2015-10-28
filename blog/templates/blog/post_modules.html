@@ -1,14 +1,18 @@
 <div class="col-sm-4 col-md-4">
 
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and author_dashboard == 'show' %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Author Dashboard</h3>
     </div>
     <div class="panel-body">
-      <div class="author-info">
-        <p><span class="label label-success">{{user.first_name}} {{user.last_name}}</span></p>
-        <p><span class="label label-default">Member since {{ user.date_joined | date:"M Y" }}</span></p>
+      <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <img src="{{ MEDIA_URL }}/{{user.author.photo}}">
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <span class="label label-success">{{user.first_name}} {{user.last_name}}</span><br><br>
+        </div>
       </div>
       <div class="row author-post-states">
         {% for s in author_post_states %}

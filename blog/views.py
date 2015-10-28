@@ -2,9 +2,10 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse_lazy
+from django.db.models import Count
 from django.views import generic
 from django.http import Http404
-from .models import Topic, Post
+from .models import Topic, Author, Post
 from .forms import PostForm
 
 
@@ -20,7 +21,9 @@ class ContextMixin(object):
         ''' Obtain path items to aid the display of menu and breadcrumbs.
             What we get from URL is a slug. This has to be matched
             against the actual topic name.
-        '''    
+        '''
+        curr_topic, curr_state = None, None
+        path_items = []
         if 'pk' in self.kwargs: # DetailView
             curr_topic = self.object.topic.name
             path_items = ['topics', curr_topic]
@@ -29,28 +32,25 @@ class ContextMixin(object):
             path_items = ['topics', curr_topic]
         elif ('state' in self.kwargs and 
               not isinstance(self.request.user, AnonymousUser)): # ListView
-            curr_topic = None
+            curr_state = self.kwargs['state']
             path_items = ['states', self.kwargs['state']]
         elif ('post/new' in self.request.path or # CreateView
               'post/' in self.request.path and '/edit' in self.request.path or # UpdateView
               'states' in self.request.path or # ListView
               'topics' in self.request.path): # ListView
-            curr_topic = None
             path_items = ['topics']
-        else:
-            curr_topic = None
-            path_items = []
     
-        return path_items, curr_topic
+        return path_items, curr_topic, curr_state
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        path_items, curr_topic = self.get_path_items()
+        path_items, curr_topic, curr_state = self.get_path_items()
         context.update({
             'path_items': path_items,
             'curr_topic': curr_topic,
             'topics': Topic.topics(),
+            'curr_state': curr_state,
         })
 
         if not isinstance(self.request.user, AnonymousUser):
@@ -61,6 +61,16 @@ class ContextMixin(object):
 
 class AboutView(ContextMixin, generic.TemplateView):
     template_name = 'blog/about.html'
+
+
+class AuthorListView(ContextMixin, generic.ListView):
+    context_object_name = 'authors' # default is object_list or post_list
+    template_name = 'blog/author_list.html'
+
+    def get_queryset(self):
+        return Author.objects.filter(user__post__state='Published') \
+                     .annotate(num_posts=Count('user__post')) \
+                     .order_by('user__first_name','user__last_name')
 
 
 class ListView(ContextMixin, generic.ListView):

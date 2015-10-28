@@ -19,7 +19,7 @@ class Topic(models.Model):
     @staticmethod
     def topics():
         return Topic.objects.filter(post__state='Published') \
-                            .annotate(num_posts=models.Count('post')) \
+                            .annotate(num_posts=Count('post')) \
                             .values_list('name','description','num_posts')
 
     @staticmethod
@@ -44,6 +44,12 @@ class Option(models.Model):
 
     def __str__(self):
         return "{:s}".format(self.name)
+
+
+class Author(models.Model):
+    user = models.OneToOneField(User)
+    profile = models.TextField(blank=False)
+    photo = models.ImageField(upload_to='.', blank=True, null=True)
 
 
 class Post(models.Model):

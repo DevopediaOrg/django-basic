@@ -10,7 +10,7 @@ urlpatterns = [
 
     url(r'^about$', views.AboutView.as_view(), name="about"),
 
-    url(r'^authors/?$', views.ListView.as_view(), name='post_list'),
+    url(r'^authors/?$', views.AuthorListView.as_view(), name='author_list'),
 
     url(r'^topics/?$', views.ListView.as_view(), name='post_list'),
     url(r'^topics/(?P<topic>[\w-]+)/?$', views.ListView.as_view(), name='post_list'),

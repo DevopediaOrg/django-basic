@@ -5,10 +5,12 @@
 {% block title %}{{ block.super }}: Post List{% endblock %}
 
 {% block content %}
-    {% if curr_topic == None %}
-        <h1 class="page-title">Latest Posts</h1>
-    {% else %}
+    {% if curr_topic %}
         <h1 class="page-title">{{curr_topic}}</h1>
+    {% elif curr_state %}
+        <h1 class="page-title">{{curr_state}} Posts</h1>
+    {% else %}
+        <h1 class="page-title">Latest Posts</h1>
     {% endif %}
     
     <div class="row">
@@ -67,7 +69,11 @@
           {% endfor %}
       </div>
 
-      {% include 'blog/post_modules.html' %}
+      {% if curr_state %}
+          {% include 'blog/post_modules.html' with author_dashboard='show' %}
+      {% else %}
+          {% include 'blog/post_modules.html' %}
+      {% endif %}
 
     </div>
 
