@@ -179,6 +179,23 @@ img.topic-img {
     text-decoration: none !important;
 }
 
+.err-404 {
+    text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    color: red;
+    font-size: 200px;
+    font-family: 'Share Tech';
+}
+
+.msg-404 {
+    text-align: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size: 30px;
+    font-family: 'Share Tech';    
+}
+
 .up-arrow {
     float: right;
 }
