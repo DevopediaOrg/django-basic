@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
+from django.http import Http404
 from .models import Topic, Post
 from .forms import PostForm
 
@@ -61,7 +62,9 @@ class ListView(ContextMixin, generic.ListView):
           'state__exact' : 'Published',
         }
         if 'topic' in self.kwargs:
-            filters['topic__name'] = Topic.unslugify(self.kwargs['topic'])
+            curr_topic = Topic.unslugify(self.kwargs['topic'])
+            if not curr_topic: raise Http404("Topic does not exist")
+            filters['topic__name'] = curr_topic
         return Post.objects.filter(**filters) \
                            .prefetch_related('author','topic','tags')
 

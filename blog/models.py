@@ -28,8 +28,7 @@ class Topic(models.Model):
         if slugs.count(topic):
           return topics[slugs.index(topic)]
         else:
-          # unexpected but return a default
-          return topic.title()
+          return None
         
 
 class Tag(models.Model):
