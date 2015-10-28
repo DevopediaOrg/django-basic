@@ -29,6 +29,14 @@
                         <span class="year">{{ post.published_date | date:"Y" }}</span> 
                       </p>
                     </div>
+                    {% else %}
+                    <div class="date cut-off">
+                      <p>
+                        <span class="day">&nbsp;</span>
+                        <span class="month">&nbsp;</span>
+                        <span class="year rotate90">DRAFT</span>
+                      </p>
+                    </div>
                     {% endif %}
 
                     {% if post.image %}

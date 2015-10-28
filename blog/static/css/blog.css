@@ -143,6 +143,42 @@ img.topic-img {
     text-transform: uppercase;
 }
 
+.author-info {
+    padding-left: 10px;
+}
+
+.author-post-states {
+    margin-top: 20px;
+}
+
+.state-icons {
+    text-align: center;
+}
+
+.state-icons a span.counts {
+    font-size: 0.8em;
+}
+
+.Draft a {
+}
+
+.Published a {
+    color: green !important;
+}
+
+.Unpublished a {
+    color: #777 !important;
+}
+
+.Draft > a:hover,
+.Draft > a:focus,
+.Published > a:hover,
+.Published > a:focus,
+.Unpublished > a:hover,
+.Unpublished > a:focus {
+    text-decoration: none !important;
+}
+
 .up-arrow {
     float: right;
 }

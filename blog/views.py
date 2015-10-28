@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
 from django.http import Http404
@@ -27,8 +27,14 @@ class ContextMixin(object):
         elif 'topic' in self.kwargs: # ListView
             curr_topic = Topic.unslugify(self.kwargs['topic'])
             path_items = ['topics', curr_topic]
+        elif ('state' in self.kwargs and 
+              not isinstance(self.request.user, AnonymousUser)): # ListView
+            curr_topic = None
+            path_items = ['states', self.kwargs['state']]
         elif ('post/new' in self.request.path or # CreateView
-              'post/' in self.request.path and '/edit' in self.request.path): # UpdateView
+              'post/' in self.request.path and '/edit' in self.request.path or # UpdateView
+              'states' in self.request.path or # ListView
+              'topics' in self.request.path): # ListView
             curr_topic = None
             path_items = ['topics']
         else:
@@ -39,12 +45,17 @@ class ContextMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         path_items, curr_topic = self.get_path_items()
         context.update({
             'path_items': path_items,
             'curr_topic': curr_topic,
-            'topics': Topic.get_topics(),
+            'topics': Topic.topics(),
         })
+
+        if not isinstance(self.request.user, AnonymousUser):
+            context['author_post_states'] = Post.author_posts(self.request.user.username)
+
         return context
 
 
@@ -57,14 +68,26 @@ class ListView(ContextMixin, generic.ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        filters = {
-          'published_date__lte' : timezone.now(),
-          'state__exact' : 'Published',
-        }
+        filters = {}
+
+        if 'state' in self.kwargs:
+            if not isinstance(self.request.user, AnonymousUser):
+                if self.kwargs['state'] in Post.states:
+                    filters['author'] = self.request.user
+                    filters['state'] = self.kwargs['state']
+                else:
+                    raise Http404("The specified state does not exist")
+            else:
+                raise Http404("You must be logged in as author to view your posts by state")
+        else:
+            filters['published_date__lte'] = timezone.now()
+            filters['state'] = 'Published'
+
         if 'topic' in self.kwargs:
             curr_topic = Topic.unslugify(self.kwargs['topic'])
-            if not curr_topic: raise Http404("Topic does not exist")
+            if not curr_topic: raise Http404("The specified topic does not exist")
             filters['topic__name'] = curr_topic
+
         return Post.objects.filter(**filters) \
                            .prefetch_related('author','topic','tags')
 
@@ -75,6 +98,7 @@ class CreateView(LoginRequiredMixin, ContextMixin, generic.CreateView):
     template_name = 'blog/post_edit.html' # default is blog/post_form.html
 
     #An alternative to using LoginRequiredMixin
+    #from django.utils.decorators import method_decorator
     #@method_decorator(login_required)
     #def dispatch(self, *args, **kwargs):
     #    return super().dispatch(*args, **kwargs)

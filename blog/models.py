@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django import forms
+from django.db.models import Count
 from django.contrib.auth.models import User, AnonymousUser
 
 
@@ -16,8 +17,8 @@ class Topic(models.Model):
         ordering = ('name',)
 
     @staticmethod
-    def get_topics():
-        return Topic.objects.filter(post__state__exact='Published') \
+    def topics():
+        return Topic.objects.filter(post__state='Published') \
                             .annotate(num_posts=models.Count('post')) \
                             .values_list('name','description','num_posts')
 
@@ -53,8 +54,7 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic, blank=False)
 
     states = ['Draft', 'Published', 'Unpublished']
-    states = [(x,x) for x in states]
-    state = models.CharField(max_length=20, choices=states, default='Draft')
+    state = models.CharField(max_length=20, choices=[(x,x) for x in states], default='Draft')
 
     created_date = models.DateTimeField(
             default=timezone.now)
@@ -72,6 +72,15 @@ class Post(models.Model):
     class Meta:
         ordering = ('-published_date',)
         
+    @staticmethod
+    def author_posts(username):
+        # order_by(): this is to clear default grouping due to class Meta
+        # https://docs.djangoproject.com/en/1.8/topics/db/aggregation/#interaction-with-default-ordering-or-order-by
+        return Post.objects.filter(author__username=username) \
+                           .values('state') \
+                           .annotate(Count('state')) \
+                           .order_by('state')
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()
@@ -85,4 +94,3 @@ class Post(models.Model):
         else:
             self.author = User.objects.get(username='admin')
         self.publish()
-    

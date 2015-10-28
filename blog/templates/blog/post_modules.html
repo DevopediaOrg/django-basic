@@ -1,4 +1,29 @@
 <div class="col-sm-4 col-md-4">
+
+  {% if user.is_authenticated %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Author Dashboard</h3>
+    </div>
+    <div class="panel-body">
+      <div class="author-info">
+        <p><span class="label label-success">{{user.first_name}} {{user.last_name}}</span></p>
+        <p><span class="label label-default">Member since {{ user.date_joined | date:"M Y" }}</span></p>
+      </div>
+      <div class="row author-post-states">
+        {% for s in author_post_states %}
+          <div class="col-sm-4 col-md-4 state-icons {{s.state}}">
+              <a href="/states/{{s.state}}">
+                  <i class="fa fa-2x fa-file-text"></i>
+                  <br><span class="counts">{{s.state}}<br>({{s.state__count}})</span>
+              </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">By Topic</h3>
@@ -15,6 +40,7 @@
       </ul>
     </div>
   </div>
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Tag Cloud</h3>
@@ -23,5 +49,6 @@
       TBD
     </div>
   </div>
+
 </div>        
 
