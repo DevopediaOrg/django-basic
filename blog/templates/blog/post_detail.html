@@ -14,23 +14,7 @@
         <div class="post">
             <div class="row header">
                 <div class="col-sm-3 col-md-3">
-                    {% if post.published_date %}
-                    <div class="date cut-off">
-                      <p>
-                        <span class="day">{{ post.published_date | date:"d" }}</span>
-                        <span class="month">{{ post.published_date | date:"M" }}</span>
-                        <span class="year">{{ post.published_date | date:"Y" }}</span> 
-                      </p>
-                    </div>
-                    {% else %}
-                    <div class="date cut-off">
-                      <p>
-                        <span class="day">&nbsp;</span>
-                        <span class="month">&nbsp;</span>
-                        <span class="year rotate90">DRAFT</span>
-                      </p>
-                    </div>
-                    {% endif %}
+                    {% include 'blog/post_date.html' %}
                 </div>
                 <div class="col-sm-3 col-md-3">
                     <span class="glyphicon glyphicon-equalizer"></span><br>
