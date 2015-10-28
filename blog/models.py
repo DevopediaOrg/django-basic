@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.text import slugify
 from django import forms
 from django.contrib.auth.models import User, AnonymousUser
 
@@ -19,6 +20,16 @@ class Topic(models.Model):
         return Topic.objects.filter(post__state__exact='Published') \
                             .annotate(num_posts=models.Count('post')) \
                             .values_list('name','description','num_posts')
+
+    @staticmethod
+    def unslugify(topic):
+        topics = Topic.objects.all().values_list('name', flat=True)
+        slugs = [slugify(x) for x in topics]
+        if slugs.count(topic):
+          return topics[slugs.index(topic)]
+        else:
+          # unexpected but return a default
+          return topic.title()
         
 
 class Tag(models.Model):
