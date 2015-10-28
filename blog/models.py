@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django import forms
+from django.http import Http404
 from django.db.models import Count
 from django.contrib.auth.models import User, AnonymousUser
 
@@ -95,8 +96,16 @@ class Post(models.Model):
         return self.title
 
     def commit(self, user):
-        if not isinstance(user, AnonymousUser):
-            self.author = user
+        if isinstance(user, AnonymousUser):
+            raise Http404("You must be logged in as an author to add or edit posts")
+ 
+        if self.pk:
+            if user.id==self.author.id:
+                # only the user who created the post can edit it
+                self.publish()
+            else:
+                raise Http404("Only the author who created the post can edit it")
         else:
-            self.author = User.objects.get(username='admin')
-        self.publish()
+            # creating a new post
+            self.author = user
+            self.publish()

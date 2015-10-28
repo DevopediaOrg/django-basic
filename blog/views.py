@@ -9,6 +9,7 @@ from .models import Topic, Author, Post
 from .forms import PostForm
 
 
+# Can be replaced with LoginRequiredMixin from django-braces
 class LoginRequiredMixin(object):
     @classmethod
     def as_view(cls, **kwargs):

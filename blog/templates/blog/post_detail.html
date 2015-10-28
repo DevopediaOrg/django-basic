@@ -41,7 +41,7 @@
                     {{ post.author.first_name }} {{ post.author.last_name }}
                 </div>
                 <div class="col-sm-3 col-md-3">
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and user.id == post.author.id %}
                     <a href="{% url "blog:post_edit" pk=post.pk %}">
                         <span class="glyphicon glyphicon-pencil"></span><br>
                         Edit Post
