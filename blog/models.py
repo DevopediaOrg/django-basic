@@ -89,7 +89,10 @@ class Post(models.Model):
                            .order_by('state')
 
     def publish(self):
-        self.published_date = timezone.now()
+        if self.state=='Published':
+            self.published_date = timezone.now()
+        elif self.state=='Draft':
+            self.published_date = None
         self.save()
 
     def __str__(self):
