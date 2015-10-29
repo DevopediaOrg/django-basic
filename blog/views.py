@@ -2,11 +2,12 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse_lazy
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.views import generic
 from django.http import Http404
 from .models import Topic, Author, Post
 from .forms import PostForm
+from .utils import get_search_query
 
 
 # Can be replaced with LoginRequiredMixin from django-braces
@@ -52,6 +53,7 @@ class ContextMixin(object):
             'curr_topic': curr_topic,
             'topics': Topic.topics(),
             'curr_state': curr_state,
+            'search_query': self.request.GET.get('q',None),
         })
 
         if not isinstance(self.request.user, AnonymousUser):
@@ -72,6 +74,21 @@ class AuthorListView(ContextMixin, generic.ListView):
         return Author.objects.filter(user__post__state='Published') \
                      .annotate(num_posts=Count('user__post')) \
                      .order_by('user__first_name','user__last_name')
+
+
+class SearchResultsView(ContextMixin, generic.ListView):
+    context_object_name = 'posts' # default is object_list or post_list
+    template_name = 'blog/search_results.html'
+    paginate_by = 12
+
+    def get_queryset(self):
+        q = self.request.GET.get('q',None)
+        if q:
+            query = get_search_query(q, ['title', 'text'])
+            perms = Q(state='Published') | Q(author__id=self.request.user.id)
+            return Post.objects.filter(query).filter(perms)
+        else:
+            return []
 
 
 class ListView(ContextMixin, generic.ListView):
