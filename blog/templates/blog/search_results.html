@@ -16,7 +16,7 @@
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 Search terms: {{search_query}}<br>
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                Found {{paginator.count}} matches
+                Found {{paginator.count}} matches. Showing {{page_obj.start_index}}-{{page_obj.end_index}}.
             </div>
             {% endif %}
             <div class="row">
