@@ -115,6 +115,12 @@ class Post(models.Model):
                            .order_by('state')
 
     @staticmethod
+    def all_author_posts():
+        return Post.objects.values_list('author__first_name','author__last_name','state') \
+                           .annotate(Count('state')) \
+                           .order_by('state')
+
+    @staticmethod
     def featured_posts():
         return Post.objects.filter(state='Published',featured=1)
 

@@ -1,3 +1,5 @@
+import os
+import json
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
@@ -61,10 +63,35 @@ class ContextMixin(object):
             'curr_state': curr_state,
             'search_query': self.request.GET.get('q',None),
         })
-        print(context['tags'])
 
         if not path_items: # HomeView
             context['featured_posts'] = Post.featured_posts()
+            
+            # Prepare chart data
+            basedir = os.path.dirname(os.path.abspath(__file__)) + '/static/'
+            context['chart1'] = 'tmp/topics.json'
+            data = [{"label":k, "value":v} for k,_,v in context['topics']]
+            with open(basedir+context['chart1'],'w') as f:
+                json.dump(data, f)
+            context['chart2'] = 'tmp/authors.json'
+            data = []
+            prev_s = None
+            curr = {}
+            for fn,ln,s,c in Post.all_author_posts():
+                if prev_s != s:
+                    prev_s = s
+                    if curr and values:
+                        curr['values'] = values
+                        data.append(curr)
+                    curr = {"key": s}
+                    values = []
+                values.append({"label":fn+' '+ln, "value":c})
+            else:
+                if curr and values:
+                    curr['values'] = values
+                    data.append(curr)
+            with open(basedir+context['chart2'],'w') as f:
+                json.dump(data, f)
 
         if not isinstance(self.request.user, AnonymousUser):
             context['author_post_states'] = Post.author_posts(self.request.user.username)
