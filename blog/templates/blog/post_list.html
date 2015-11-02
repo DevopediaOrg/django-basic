@@ -32,6 +32,19 @@
                         <img src="{{ MEDIA_URL }}/{{post.image}}">           
                     </div>
                     {% endif %}
+
+                    <div>
+                    <span class="glyphicon glyphicon-user"></span>
+                    {{post.author.first_name}} {{post.author.last_name}}
+
+                    <br><span class="glyphicon glyphicon-paperclip"></span>
+                    {{post.topic}}
+
+                    {% if post.featured %}
+                    <br><span class="glyphicon glyphicon-certificate"></span>
+                    Featured
+                    {% endif %}
+                    </div>
                   </div>
 
                   <div class="col-sm-8 col-md-8">
