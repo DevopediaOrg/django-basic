@@ -1,8 +1,16 @@
 .date {
-    background: #c4453c;
     float: left;
     position: relative;
     width: 50px;
+}
+.date-Draft {
+    background: #FF8006;
+}
+.date-Published {
+    background: #056B10;
+}
+.date-Unpublished {
+    background: #777;
 }
 .date p {
     color: #f6f6f6;
@@ -34,12 +42,20 @@
 
 /* Traditional Ribbon */
 .traditional:after, .traditional:before {
-    border-top: 15px solid #c4453c; 
     bottom: -15px;
     content: '';
     height: 0;
     position: absolute;
     width: 0;
+}
+.traditional-Draft:after, .traditional-Draft:before {
+    border-top: 15px solid #FF8006; 
+}
+.traditional-Published:after, .traditional-Published:before {
+    border-top: 15px solid #056B10; 
+}
+.traditional-Unpublished:after, .traditional-Unpublished:before {
+    border-top: 15px solid #777; 
 }
 .traditional:after {
     border-right: 25px solid transparent;  
@@ -52,16 +68,6 @@
 
 /* Cut-off Ribbon */
 .cut-off:after {
-    background-image: -webkit-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c), 
-                      -webkit-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
-    background-image:    -moz-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
-                         -moz-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
-    background-image:     -ms-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
-                          -ms-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
-    background-image:      -o-linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
-                           -o-linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
-    background-image:         linear-gradient(45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c),
-                              linear-gradient(-45deg, #c4453c 25%, transparent 25%, transparent 75%, #c4453c 75%, #c4453c);
     background-repeat: repeat-x;
     background-position: 50% 0;
     background-size: 10px 10px;
@@ -72,10 +78,45 @@
     position: absolute; /* Make sure the parent element has a position set */
     right: 0;
 }
+.cut-off-Draft:after {
+    background-image: -webkit-linear-gradient(45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006), 
+                      -webkit-linear-gradient(-45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006);
+    background-image:    -moz-linear-gradient(45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006),
+                         -moz-linear-gradient(-45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006);
+    background-image:     -ms-linear-gradient(45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006),
+                          -ms-linear-gradient(-45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006);
+    background-image:      -o-linear-gradient(45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006),
+                           -o-linear-gradient(-45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006);
+    background-image:         linear-gradient(45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006),
+                              linear-gradient(-45deg, #FF8006 25%, transparent 25%, transparent 75%, #FF8006 75%, #FF8006);
+}
+.cut-off-Published:after {
+    background-image: -webkit-linear-gradient(45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10), 
+                      -webkit-linear-gradient(-45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10);
+    background-image:    -moz-linear-gradient(45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10),
+                         -moz-linear-gradient(-45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10);
+    background-image:     -ms-linear-gradient(45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10),
+                          -ms-linear-gradient(-45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10);
+    background-image:      -o-linear-gradient(45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10),
+                           -o-linear-gradient(-45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10);
+    background-image:         linear-gradient(45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10),
+                              linear-gradient(-45deg, #056B10 25%, transparent 25%, transparent 75%, #056B10 75%, #056B10);
+}
+.cut-off-Unpublished:after {
+    background-image: -webkit-linear-gradient(45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777), 
+                      -webkit-linear-gradient(-45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777);
+    background-image:    -moz-linear-gradient(45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777),
+                         -moz-linear-gradient(-45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777);
+    background-image:     -ms-linear-gradient(45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777),
+                          -ms-linear-gradient(-45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777);
+    background-image:      -o-linear-gradient(45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777),
+                           -o-linear-gradient(-45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777);
+    background-image:         linear-gradient(45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777),
+                              linear-gradient(-45deg, #777 25%, transparent 25%, transparent 75%, #777 75%, #777);
+}
 
 /* Rounded Ribbon */
 .rounded:before {
-    background-image: -webkit-radial-gradient(#c4453c 50%, transparent 50%);
     background-position: 0% 100%;
     background-repeat: repeat;
     background-size: 10px 10px;
@@ -86,7 +127,15 @@
     position: absolute;
     right: -5px;
 }
-
+.rounded-Draft:before {
+    background-image: -webkit-radial-gradient(#FF8006 50%, transparent 50%);
+}
+.rounded-Published:before {
+    background-image: -webkit-radial-gradient(#056B10 50%, transparent 50%);
+}
+.rounded-Unpublished:before {
+    background-image: -webkit-radial-gradient(#777 50%, transparent 50%);
+}
 .rotate90 {
     -ms-transform: rotate(-90deg); /* IE 9 */
     -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */

@@ -183,10 +183,11 @@ img.topic-img {
 }
 
 .Draft a {
+    color: #FF8006 !important;
 }
 
 .Published a {
-    color: green !important;
+    color: #056B10 !important;
 }
 
 .Unpublished a {
