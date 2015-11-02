@@ -119,7 +119,9 @@ class Post(models.Model):
         return Post.objects.filter(state='Published',featured=1)
 
     def publish(self):
-        if self.state=='Published':
+        if self.state=='Published' and not self.published_date:
+            # don't change the date when posts are edited
+            # except when it becomes a draft again
             self.published_date = timezone.now()
         elif self.state=='Draft':
             self.published_date = None
