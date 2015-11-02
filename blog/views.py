@@ -56,6 +56,9 @@ class ContextMixin(object):
             'search_query': self.request.GET.get('q',None),
         })
 
+        if not path_items: # HomeView
+            context['featured_posts'] = Post.featured_posts()
+
         if not isinstance(self.request.user, AnonymousUser):
             context['author_post_states'] = Post.author_posts(self.request.user.username)
 

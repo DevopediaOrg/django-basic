@@ -7,8 +7,8 @@ class PostForm(forms.ModelForm):
         model = Post
 
         # forms.ALL_FIELDS or '__all__' for all fields
-        fields = ('title', 'topic', 'state', 'text',
-                  'tags', 'options', 'image')
+        fields = ('title', 'topic', 'state', 'featured', 
+                  'text', 'tags', 'options', 'image')
 
         labels = {
             'title': 'Post title'.title(),

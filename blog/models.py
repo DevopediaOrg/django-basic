@@ -63,6 +63,8 @@ class Post(models.Model):
     states = ['Draft', 'Published', 'Unpublished']
     state = models.CharField(max_length=20, choices=[(x,x) for x in states], default='Draft')
 
+    featured = models.BooleanField(default=0)
+
     created_date = models.DateTimeField(
             default=timezone.now)
     published_date = models.DateTimeField(
@@ -87,6 +89,10 @@ class Post(models.Model):
                            .values('state') \
                            .annotate(Count('state')) \
                            .order_by('state')
+
+    @staticmethod
+    def featured_posts():
+        return Post.objects.filter(state='Published',featured=1)
 
     def publish(self):
         if self.state=='Published':

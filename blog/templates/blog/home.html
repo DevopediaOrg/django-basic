@@ -11,9 +11,12 @@
       {% for post in posts|slice:":3" %}
       <div class="col-sm-4 col-md-4">
         <div class="home-thumbnail thumbnail">
+          {% url "blog:post_detail" pk=post.pk  as detail_url %}
           <div class="img-wrapper">
           {% if post.image %}
+            <a href="{{detail_url}}">
             <img src="{{ MEDIA_URL }}/{{post.image}}" data-holder-rendered="true" style="max-width:100%; max-height:100px; display:block;">
+            </a>
           {% endif %}
           </div>
           <div class="caption">
@@ -22,20 +25,26 @@
                 {{post.author.first_name}} {{post.author.last_name}}
             </span>
             <h3>{{post.topic}}</h3>
-            <p class="home-thumb-title">{{post.title|truncatewords:20}}</p>
+            <p class="home-thumb-title">
+                <a href="{{detail_url}}">
+                {{post.title|truncatewords:20}}
+                </a>
+            </p>
           </div>
         </div>
       </div>
       {% endfor %}
 
       <h2 class="subtitle">Featured Posts</h2>
-      {% for i in "000" %}
-      {% with post=posts|random %}
+      {% for post in featured_posts|slice:":3" %}
       <div class="col-sm-4 col-md-4">
         <div class="home-thumbnail thumbnail">
+          {% url "blog:post_detail" pk=post.pk  as detail_url %}
           <div class="img-wrapper">
           {% if post.image %}
+            <a href="{{detail_url}}">
             <img src="{{ MEDIA_URL }}/{{post.image}}" data-holder-rendered="true" style="max-width:100%; max-height:100px; display:block;">
+            </a>
           {% endif %}
           </div>
           <div class="caption">
@@ -44,11 +53,14 @@
                 {{post.author.first_name}} {{post.author.last_name}}
             </span>
             <h3>{{post.topic}}</h3>
-            <p class="home-thumb-title">{{post.title|truncatewords:20}}</p>
+            <p class="home-thumb-title">
+                <a href="{{detail_url}}">
+                {{post.title|truncatewords:20}}
+                </a>
+            </p>
           </div>
         </div>
       </div>
-      {% endwith %}
       {% endfor %}
 
       <div id="firstWord" class="main-text">

@@ -58,7 +58,7 @@ h1.page-title {
 
 h2.subtitle {
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 img.topic-img {
@@ -143,9 +143,15 @@ img.topic-img {
     font-size: 0.9em;
 }
 
+.home-thumb-title > a:hover,
+.home-thumb-title > a:focus {
+    text-decoration: none !important;
+}
+
 .img-wrapper {
     height: 100px;
-    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .post .main-text {
