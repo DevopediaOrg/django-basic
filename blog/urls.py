@@ -15,6 +15,9 @@ urlpatterns = [
     url(r'^topics/?$', views.ListView.as_view(), name='all_topic_list'),
     url(r'^topics/(?P<topic>[\w-]+)/?$', views.ListView.as_view(), name='topic_list'),
 
+    url(r'^tags/?$', RedirectView.as_view(url='/topics', permanent=False)),
+    url(r'^tags/(?P<tag>[\w-]+)/?$', views.ListView.as_view(), name='tag_list'),
+
     url(r'^states/?$', RedirectView.as_view(url='/topics', permanent=False)),
     url(r'^states/(?P<state>[\w-]+)/?$', views.ListView.as_view(), name='state_list'),
 

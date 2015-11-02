@@ -8,7 +8,7 @@
                     <li><a href="/">Home</a></li>
                 {% endif %}
 
-                {% if 'topics' in request.path or 'post/' in request.path or 'states' in request.path %}
+                {% if 'topics' in request.path or 'tags' in request.path or 'post/' in request.path or 'states' in request.path %}
                 <li class="dropdown show-on-hover active">
                 {% else %}
                 <li class="dropdown show-on-hover">

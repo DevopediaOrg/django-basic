@@ -222,3 +222,12 @@ img.topic-img {
 .up-arrow {
     float: right;
 }
+
+ul.tag-cloud li {
+    float: left;
+    margin-left: 0px;
+    margin-right: 5px;
+    padding: 0px;
+    list-style-type: none;
+    line-height: 1.5em;
+}

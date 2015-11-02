@@ -7,6 +7,8 @@
 {% block content %}
     {% if curr_topic %}
         <h1 class="page-title">{{curr_topic}}</h1>
+    {% elif curr_tag %}
+        <h1 class="page-title">Tagged with <em>{{curr_tag}}</em></h1>
     {% elif curr_state %}
         <h1 class="page-title">{{curr_state}} Posts</h1>
     {% else %}

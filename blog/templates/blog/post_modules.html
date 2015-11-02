@@ -50,7 +50,19 @@
       <h3 class="panel-title">Tag Cloud</h3>
     </div>
     <div class="panel-body">
-      TBD
+      <ul class="tag-cloud">
+          {% for tag, _, dist in tags %}
+              {% if tag == curr_tag %}
+              <li style="font-size:{{dist}}em">
+                  <span style="color:darkorange">{{tag}}</span>
+              </li>
+              {% else %}
+              <li style="font-size:{{dist}}em">
+                  <a href="/tags/{{tag|slugify}}">{{tag}}</a>
+              </li>
+              {% endif %}
+          {% endfor %}
+      </ul>
     </div>
   </div>
 

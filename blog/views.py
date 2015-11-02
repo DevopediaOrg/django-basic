@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.db.models import Count, Q
 from django.views import generic
 from django.http import Http404
-from .models import Topic, Author, Post
+from .models import Topic, Tag, Author, Post
 from .forms import PostForm
 from .utils import get_search_query
 
@@ -24,7 +24,7 @@ class ContextMixin(object):
             What we get from URL is a slug. This has to be matched
             against the actual topic name.
         '''
-        curr_topic, curr_state = None, None
+        curr_topic, curr_tag, curr_state = None, None, None
         path_items = []
         if 'pk' in self.kwargs: # DetailView
             curr_topic = self.object.topic.name
@@ -32,6 +32,9 @@ class ContextMixin(object):
         elif 'topic' in self.kwargs: # ListView
             curr_topic = Topic.unslugify(self.kwargs['topic'])
             path_items = ['topics', curr_topic]
+        elif 'tag' in self.kwargs: # ListView
+            curr_tag = Tag.unslugify(self.kwargs['tag'])
+            path_items = ['tags', curr_tag]
         elif ('state' in self.kwargs and 
               not isinstance(self.request.user, AnonymousUser)): # ListView
             curr_state = self.kwargs['state']
@@ -39,22 +42,26 @@ class ContextMixin(object):
         elif ('post/new' in self.request.path or # CreateView
               'post/' in self.request.path and '/edit' in self.request.path or # UpdateView
               'states' in self.request.path or # ListView
+              'tags' in self.request.path or # ListView
               'topics' in self.request.path): # ListView
             path_items = ['topics']
     
-        return path_items, curr_topic, curr_state
+        return path_items, curr_topic, curr_tag, curr_state
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        path_items, curr_topic, curr_state = self.get_path_items()
+        path_items, curr_topic, curr_tag, curr_state = self.get_path_items()
         context.update({
             'path_items': path_items,
             'curr_topic': curr_topic,
             'topics': Topic.topics(),
+            'curr_tag': curr_tag,
+            'tags': Tag.distribution(),
             'curr_state': curr_state,
             'search_query': self.request.GET.get('q',None),
         })
+        print(context['tags'])
 
         if not path_items: # HomeView
             context['featured_posts'] = Post.featured_posts()
@@ -118,6 +125,11 @@ class ListView(ContextMixin, generic.ListView):
             curr_topic = Topic.unslugify(self.kwargs['topic'])
             if not curr_topic: raise Http404("The specified topic does not exist")
             filters['topic__name'] = curr_topic
+
+        if 'tag' in self.kwargs:
+            curr_tag = Tag.unslugify(self.kwargs['tag'])
+            if not curr_tag: raise Http404("The specified tag does not exist")
+            filters['tags__name'] = curr_tag
 
         return Post.objects.filter(**filters) \
                            .prefetch_related('author','topic','tags')

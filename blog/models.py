@@ -39,6 +39,30 @@ class Tag(models.Model):
     def __str__(self):
         return "{:s}".format(self.name)
 
+    @staticmethod
+    def tags():
+        return Tag.objects.filter(post__state='Published') \
+                            .annotate(num_posts=Count('post')) \
+                            .values_list('name','num_posts')
+
+    @staticmethod
+    def distribution():
+        qs = Tag.tags()
+        total = sum([q[1] for q in qs])
+        dist = []
+        for q in qs:
+                dist.append((q[0], q[1], 1+6*q[1]/total))
+        return dist
+
+    @staticmethod
+    def unslugify(tag):
+        tags = Tag.objects.all().values_list('name', flat=True)
+        slugs = [slugify(x) for x in tags]
+        if slugs.count(tag):
+          return tags[slugs.index(tag)]
+        else:
+          return None
+
 
 class Option(models.Model):
     name = models.CharField(max_length=100, unique=True)
