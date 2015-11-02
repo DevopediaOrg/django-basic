@@ -1,0 +1,64 @@
+{% extends "blog/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}{{ block.super }}: Home{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-8 col-md-8">
+      <h2 class="subtitle">Latest Posts</h2>
+      {% for post in posts|slice:":3" %}
+      <div class="col-sm-4 col-md-4">
+        <div class="home-thumbnail thumbnail">
+          <div class="img-wrapper">
+          {% if post.image %}
+            <img src="{{ MEDIA_URL }}/{{post.image}}" data-holder-rendered="true" style="max-width:100%; max-height:100px; display:block;">
+          {% endif %}
+          </div>
+          <div class="caption">
+            <span class="label label-info">
+                {{post.published_date|date:"d M Y"}} | 
+                {{post.author.first_name}} {{post.author.last_name}}
+            </span>
+            <h3>{{post.topic}}</h3>
+            <p class="home-thumb-title">{{post.title|truncatewords:20}}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <h2 class="subtitle">Featured Posts</h2>
+      {% for i in "000" %}
+      {% with post=posts|random %}
+      <div class="col-sm-4 col-md-4">
+        <div class="home-thumbnail thumbnail">
+          <div class="img-wrapper">
+          {% if post.image %}
+            <img src="{{ MEDIA_URL }}/{{post.image}}" data-holder-rendered="true" style="max-width:100%; max-height:100px; display:block;">
+          {% endif %}
+          </div>
+          <div class="caption">
+            <span class="label label-info">
+                {{post.published_date|date:"d M Y"}} | 
+                {{post.author.first_name}} {{post.author.last_name}}
+            </span>
+            <h3>{{post.topic}}</h3>
+            <p class="home-thumb-title">{{post.title|truncatewords:20}}</p>
+          </div>
+        </div>
+      </div>
+      {% endwith %}
+      {% endfor %}
+
+      <div id="firstWord" class="main-text">
+        <p>At explicabo corrupti possimus ex cum ipsam esse facere excepturi, quidem modi culpa in saepe incidunt illo omnis, odio doloribus voluptatibus laboriosam, tempora adipisci placeat nulla ex quos. Saepe laboriosam aut sint, cumque ipsum facilis accusantium natus maiores inventore neque aut.</p>
+
+        <p>Maxime nostrum praesentium reprehenderit labore blanditiis vel, veritatis ut praesentium placeat error vitae iusto, consequatur velit nobis error minus culpa porro corrupti assumenda. Nobis facere exercitationem distinctio facilis obcaecati dolorem voluptas unde cumque.</p>          
+      </div>
+  </div>
+
+  {% include 'blog/post_modules.html' %}
+</div>
+
+{% endblock content %}

@@ -120,6 +120,12 @@ class ListView(ContextMixin, generic.ListView):
                            .prefetch_related('author','topic','tags')
 
 
+class HomeView(ListView):
+    context_object_name = 'posts' # default is object_list or post_list
+    template_name = 'blog/home.html'
+    paginate_by = 0
+
+
 class CreateView(LoginRequiredMixin, ContextMixin, generic.CreateView):
     model = Post
     form_class = PostForm # OR fields = ['title','text']

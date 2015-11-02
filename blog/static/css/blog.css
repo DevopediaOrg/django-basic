@@ -133,6 +133,21 @@ img.topic-img {
     margin-right: 20px;
 }
 
+.home-thumbnail {
+    height: 300px;
+    text-align: center;
+}
+
+.home-thumb-title {
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.img-wrapper {
+    height: 100px;
+    text-align: center !important;
+}
+
 .post .main-text {
     margin-bottom: 40px;
 }
