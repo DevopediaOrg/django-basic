@@ -3,5 +3,5 @@ __pycache__
 venv
 *.sqlite3
 /media
-/static
+/blog/static/tmp/*
 .DS_Store
