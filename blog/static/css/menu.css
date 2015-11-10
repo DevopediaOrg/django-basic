@@ -119,6 +119,13 @@
     color: #00ccff !important;
 }
 
+.navbar-default .navbar-toggle:hover  {
+}
+ 
+.navbar-default .navbar-toggle:focus {
+}
+
+
 /* ====================================================================
    Breadcrumbs 
 ---------------------------------------------------------------------*/
