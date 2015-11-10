@@ -4,5 +4,7 @@ $.fn.firstWord = function() {
 };
 
 $( window ).load(function() {
-    $("#firstWord").firstWord();
+    if (document.getElementById("firstWord")) {
+        $("#firstWord").firstWord();
+    }
 });
