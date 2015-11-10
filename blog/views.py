@@ -41,6 +41,10 @@ class ContextMixin(object):
               not isinstance(self.request.user, AnonymousUser)): # ListView
             curr_state = self.kwargs['state']
             path_items = ['states', self.kwargs['state']]
+        elif 'authors' in self.request.path:
+            path_items = ['authors']
+        elif 'about' in self.request.path:
+            path_items = ['about']
         elif ('post/new' in self.request.path or # CreateView
               'post/' in self.request.path and '/edit' in self.request.path or # UpdateView
               'states' in self.request.path or # ListView
