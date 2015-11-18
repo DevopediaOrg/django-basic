@@ -34,20 +34,22 @@
                     </ul>
                 </li>
 
-                {% if request.path == '/authors' %}
-                    <li class='active'><a href="{% url "blog:author_list" %}">Authors</a></li>
+                {% url "blog:author_list" as authors_url %}
+                {% if request.path == authors_url %}
+                    <li class='active'><a href="{{authors_url}}">Authors</a></li>
                 {% else %}
-                    <li><a href="{% url "blog:author_list" %}">Authors</a></li>
+                    <li><a href="{{authors_url}}">Authors</a></li>
                 {% endif %}
 
-                {% if request.path == '/about' %}
-                    <li class='active'><a href="{% url "blog:about" %}">About</a></li>
+                {% url "blog:about" as about_url %}
+                {% if request.path == about_url %}
+                    <li class='active'><a href="{{about_url}}">About</a></li>
                 {% else %}
-                    <li><a href="{% url "blog:about" %}">About</a></li>
+                    <li><a href="{{about_url}}">About</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right mainmenu">
-                <form class="navbar-form navbar-right" role="search" action="/search">
+                <form class="navbar-form navbar-right" role="search" action="{% url "blog:search_results" %}">
                     <div class="form-group">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         <input type="text" class="form-control" name="q" placeholder="Search ...">
