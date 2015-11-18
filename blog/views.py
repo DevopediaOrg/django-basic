@@ -213,3 +213,7 @@ class UpdateView(LoginRequiredMixin, ContextMixin, generic.UpdateView):
 
 class DetailView(ContextMixin, generic.DetailView):
     model = Post
+
+class DeleteView(LoginRequiredMixin, ContextMixin, generic.DeleteView):
+    model = Post
+    success_url = reverse_lazy('blog:author_list')

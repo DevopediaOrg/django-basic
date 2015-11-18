@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^post/(?P<pk>[0-9]+)/edit/?$', views.UpdateView.as_view(), name='post_edit'),
     url(r'^post/(?P<pk>[0-9]+)/?$', views.DetailView.as_view(), name='post_detail'),
     url(r'^post/new/?$', views.CreateView.as_view(), name='post_new'),
+    url(r'^post/(?P<pk>[0-9]+)/delete/?$', views.DeleteView.as_view(), name='post_delete'),
 
     url(r'^about$', views.AboutView.as_view(), name='about'),
 

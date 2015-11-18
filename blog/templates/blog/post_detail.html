@@ -16,21 +16,31 @@
                 <div class="col-sm-3 col-md-3">
                     {% include 'blog/post_date.html' %}
                 </div>
-                <div class="col-sm-3 col-md-3">
-                    <span class="glyphicon glyphicon-equalizer"></span><br>
-                    {{ post.text | wordcount }} words
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <img style="max-height:19px" src="{{ MEDIA_URL }}/{{post.author.author.photo}}"><br>
-                    {{ post.author.first_name }} {{ post.author.last_name }}
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    {% if user.is_authenticated and user.id == post.author.id %}
-                    <a href="{% url "blog:post_edit" pk=post.pk %}">
-                        <span class="glyphicon glyphicon-pencil"></span><br>
-                        Edit Post
-                    </a>
-                    {% endif %}
+                <div class="col-sm-9 col-md-9">
+                    <div class="col-sm-3 col-md-3">
+                        <span class="glyphicon glyphicon-equalizer"></span><br>
+                        {{ post.text | wordcount }} words
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <img style="max-height:19px" src="{{ MEDIA_URL }}/{{post.author.author.photo}}"><br>
+                        {{ post.author.first_name }} {{ post.author.last_name }}
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        {% if user.is_authenticated and user.id == post.author.id %}
+                        <a href="{% url "blog:post_edit" pk=post.pk %}">
+                            <span class="glyphicon glyphicon-pencil"></span><br>
+                            Edit Post
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        {% if user.is_authenticated and user.id == post.author.id %}
+                        <a href="{% url "blog:post_delete" pk=post.pk %}">
+                            <span class="glyphicon glyphicon-trash"></span><br>
+                            Delete Post
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
