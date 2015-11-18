@@ -22,28 +22,28 @@
                 {% else %}
                 <li class="dropdown show-on-hover">
                 {% endif %}
-                    <a href="/topics" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Blog <span class="caret"></span></a>
+                    <a href="{% url "blog:all_topic_list" %}" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">Blog <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {% for topic, _, _ in topics %}
                             {% if topic == curr_topic %}
-                            <li class="active"><a href="/topics/{{ topic | slugify }}">{{ topic }}</a></li>
+                            <li class="active"><a href="{% url "blog:topic_list" topic|slugify %}">{{ topic }}</a></li>
                             {% else %}
-                            <li><a href="/topics/{{ topic | slugify }}">{{ topic }}</a></li>
+                            <li><a href="{% url "blog:topic_list" topic|slugify %}">{{ topic }}</a></li>
                             {% endif %}
                         {% endfor %}
                     </ul>
                 </li>
 
                 {% if request.path == '/authors' %}
-                    <li class='active'><a href="/authors">Authors</a></li>
+                    <li class='active'><a href="{% url "blog:author_list" %}">Authors</a></li>
                 {% else %}
-                    <li><a href="/authors">Authors</a></li>
+                    <li><a href="{% url "blog:author_list" %}">Authors</a></li>
                 {% endif %}
 
                 {% if request.path == '/about' %}
-                    <li class='active'><a href="/about">About</a></li>
+                    <li class='active'><a href="{% url "blog:about" %}">About</a></li>
                 {% else %}
-                    <li><a href="/about">About</a></li>
+                    <li><a href="{% url "blog:about" %}">About</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right mainmenu">

@@ -17,7 +17,7 @@
       <div class="row author-post-states">
         {% for s in author_post_states %}
           <div class="col-sm-4 col-md-4 state-icons {{s.state}}">
-              <a href="/states/{{s.state}}">
+              <a href="{% url "blog:state_list" state=s.state %}">
                   <i class="fa fa-2x fa-file-text"></i>
                   <br><span class="counts">{{s.state}}<br>({{s.state__count}})</span>
               </a>
@@ -38,7 +38,7 @@
               {% if topic == curr_topic %}
               <li>{{topic}} ({{num_posts}})</li>
               {% else %}
-              <li><a href="/topics/{{topic|slugify}}">{{topic}} ({{num_posts}})</a></li>
+              <li><a href="{% url "blog:topic_list" topic|slugify %}">{{topic}} ({{num_posts}})</a></li>
               {% endif %}
           {% endfor %}
       </ul>
@@ -58,7 +58,7 @@
               </li>
               {% else %}
               <li style="font-size:{{dist}}em">
-                  <a href="/tags/{{tag|slugify}}">{{tag}}</a>
+                  <a href="{% url "blog:tag_list" tag|slugify %}">{{tag}}</a>
               </li>
               {% endif %}
           {% endfor %}
