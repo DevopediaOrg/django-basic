@@ -216,6 +216,14 @@ img.topic-img {
     text-transform: uppercase;
 }
 
+.author-dashboard-img img {
+    max-width: 100%;
+}
+
+.author-dashboard-text {
+    padding-top: 20px;
+}
+
 .state-icons {
     text-align: center;
 }

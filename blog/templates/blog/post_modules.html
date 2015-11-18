@@ -7,11 +7,14 @@
     </div>
     <div class="panel-body">
       <div class="row">
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-6 col-md-6 author-dashboard-img">
             <img src="{{ MEDIA_URL }}/{{user.author.photo}}">
         </div>
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-6 col-md-6 author-dashboard-text">
             <span class="label label-success">{{user.first_name}} {{user.last_name}}</span><br><br>
+            <a href="{% url "blog:post_new" %}">
+                <i class="fa fa-plus"> Add Post</i>
+            </a>            
         </div>
       </div>
       <div class="row author-post-states">
