@@ -54,6 +54,49 @@ class ContextMixin(object):
     
         return path_items, curr_topic, curr_tag, curr_state
 
+    def make_home_charts(self, context):
+        # Pie chart of posts by topics
+        basedir = os.path.dirname(os.path.abspath(__file__)) + '/static/'
+        context['chart1'] = 'tmp/topics.json'
+        data = [{"label":k, "value":v} for k,_,v in context['topics']]
+        with open(basedir + context['chart1'],'w') as f:
+            json.dump(data, f)
+
+        # Horizontal bar chart of author posts
+        context['chart2'] = 'tmp/authors.json'
+        data = []
+        prev_s = None
+        curr = {}
+        values = []
+        authors = set()
+        for fn,ln,s,c in Post.all_author_posts():
+            if prev_s != s:
+                prev_s = s
+                if curr and values:
+                    curr['values'] = values
+                    data.append(curr)
+                curr = {"key": s}
+                values = []
+            author = "{} {}".format(fn, ln)
+            values.append({"label":author, "value":c})
+            authors.add(author)
+        else: # no break above, always execute
+            if curr and values:
+                curr['values'] = values
+                data.append(curr)
+
+        # Need to do zero-filling in case JS library doen't handle missing points
+        for author in authors:
+            for d in data:
+                for v in d['values']:
+                    if author == v['label']:
+                        break
+                else:
+                    d['values'].append({"label":author, "value":0})
+
+        with open(basedir + context['chart2'],'w') as f:
+            json.dump(data, f)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -70,32 +113,7 @@ class ContextMixin(object):
 
         if not path_items: # HomeView
             context['featured_posts'] = Post.featured_posts()
-            
-            # Prepare chart data
-            basedir = os.path.dirname(os.path.abspath(__file__)) + '/static/'
-            context['chart1'] = 'tmp/topics.json'
-            data = [{"label":k, "value":v} for k,_,v in context['topics']]
-            with open(basedir+context['chart1'],'w') as f:
-                json.dump(data, f)
-            context['chart2'] = 'tmp/authors.json'
-            data = []
-            prev_s = None
-            curr = {}
-            for fn,ln,s,c in Post.all_author_posts():
-                if prev_s != s:
-                    prev_s = s
-                    if curr and values:
-                        curr['values'] = values
-                        data.append(curr)
-                    curr = {"key": s}
-                    values = []
-                values.append({"label":fn+' '+ln, "value":c})
-            else:
-                if curr and values:
-                    curr['values'] = values
-                    data.append(curr)
-            with open(basedir+context['chart2'],'w') as f:
-                json.dump(data, f)
+            self.make_home_charts(context)
 
         if not isinstance(self.request.user, AnonymousUser):
             context['author_post_states'] = Post.author_posts(self.request.user.username)

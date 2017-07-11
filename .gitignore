@@ -1,6 +1,7 @@
 *.pyc
 __pycache__
 venv
+*.sql
 *.sqlite3
 /media
 /blog/static/tmp/*
