@@ -12,9 +12,14 @@ git clone https://github.com/IndianEngineeringDesignForum/django-basic.git
 # Enter the cloned repo
 cd django-basic
 
-# Create a virtual environment and activate it
+# Create a virtual environment
 virtualenv --python=python3.4 venv
+
+# Activate venv on Linux
 source venv/bin/activate
+
+# Activate venv on Windows
+.\venv\Scripts\activate
 
 # Install necessary Python packages including Django
 pip install -r requirements.txt
@@ -22,6 +27,9 @@ pip install -r requirements.txt
 # Create the database and perform all migrations
 # Database file "thetechblog.sqlite3" will be created
 python manage.py migrate
+
+# Start the server
+python manage.py runserver
 ```
 
 The resulting homepage should look like the following:
@@ -32,7 +40,7 @@ You can populate the site with random test data. This will also give you a feel 
 
 1. Create some images for posts and user avatars. For convenience, these images have been pre-created and saved in folder `media/` are part of this test data.
 
-2. From root folder, run this command: `python testing/generateTestData.py`. This will generate a file named `testdata.sql`. This contains SQLite commands.
+2. From root folder, run this command: `python testing/generateTestData.py`. This will generate a file named `testdata.sql`. This contains SQLite commands. Superuser and all other users/authors are given the default password "Django".
 
 3. Get into SQLite command prompt: `sqlite3 thetechblog.sqlite3`
 
